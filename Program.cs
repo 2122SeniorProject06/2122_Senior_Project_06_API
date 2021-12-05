@@ -6,7 +6,15 @@ namespace _2122_Senior_Project_06
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Working Message!");
+            bool verify = Sys_Security.VerifySQL("SELECT * FROM articles WHERE articleid = 1 AND 1=1");
+            if(verify)
+            {
+                Console.WriteLine("True");
+            }
+            else
+            {
+                Console.WriteLine("False");
+            }
         }
     }
 }
