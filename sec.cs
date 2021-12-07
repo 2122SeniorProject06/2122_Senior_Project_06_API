@@ -6,7 +6,7 @@ namespace _2122_Senior_Project_06
 {
     public class Sys_Security
     {
-        private static string SHA256_Hash(string args) // returns the SHA256 hash of args
+        public static string SHA256_Hash(string args) // returns the SHA256 hash of args
         {
             SHA256Managed _sha256 = new SHA256Managed();
             byte[] _cipherText = _sha256.ComputeHash(Encoding.Default.GetBytes(args));
@@ -33,15 +33,26 @@ namespace _2122_Senior_Project_06
             // This is a temporary implementation, certain characters and strings that SHOULD be viable
             // in a valid password conflict with they sqlChecklist array
         }
+        public static void printBool(bool verify)
+        {
+            if(verify)
+            {
+                Console.WriteLine("True");
+            }
+            else
+            {
+                Console.WriteLine("False");
+            }
+        }
         public static bool Verify_Pass(string Curr_pass, string Stored_pass) // verifies inputted passwords matches stored
         {
 
             // **check if Admin/ has admin permission**
 
             string Curr_hash = SHA256_Hash(Curr_pass);  // hashes inputted password with SHA256
-            bool verify;
+            bool verify = false;
             int entry_attempt = 0;
-            if (Curr_pass == Stored_pass) //if the passwords match
+            if (Curr_hash == Stored_pass) //if the passwords match
             {
                 verify = true; //cant i just say return true? take away the verify all together
                 // allow user's access to application(under their account)
@@ -57,7 +68,7 @@ namespace _2122_Senior_Project_06
                 entry_attempt++;
                 verify = false;
             }
-
+            Console.WriteLine("The SHA256 hash of the password, "+ Curr_pass+ ", is: " + Curr_hash);
             return verify;
         }
         public static bool CreateNewAcc(string args)
@@ -106,7 +117,7 @@ namespace _2122_Senior_Project_06
 
             // current implementatin is subject to change. This is a rough implementations and does not account for special characters
             // certain passwords conflict with VerifySQL() function
-            //
+            // **save hashed password to database**
 
             return verify_pass;;
         } 
