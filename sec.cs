@@ -12,7 +12,7 @@ namespace _2122_Senior_Project_06
             byte[] _cipherText = _sha256.ComputeHash(Encoding.Default.GetBytes(args));
             return Convert.ToBase64String(_cipherText);
         }
-        public static bool VerifySQL(string args) // verifies args does no correlate with SQL commands; true==valid input
+        public static bool VerifySQL(string args) // verifies args does no correlate with SQL commands; true==invalid input, false==vail input
         {
             
             bool isSQLInjection = false;
@@ -33,7 +33,7 @@ namespace _2122_Senior_Project_06
             // This is a temporary implementation, certain characters and strings that SHOULD be viable
             // in a valid password conflict with they sqlChecklist array
         }
-        public static bool Verify_Pass(string Curr_pass, string Stored_pass, bool New_acc) // verifies inputted passwords matches stored
+        public static bool Verify_Pass(string Curr_pass, string Stored_pass) // verifies inputted passwords matches stored
         {
 
             // **check if Admin/ has admin permission**
@@ -60,6 +60,56 @@ namespace _2122_Senior_Project_06
 
             return verify;
         }
+        public static bool CreateNewAcc(string args)
+        {
+            bool verify_pass = true; // boolean that signifies if the password meets requirements
+
+            bool verify_length = false; // boolean that signifies if the password meets length requirements
+            bool no_SQL = false; // boolean that signifies if the password does not contain SQL commands
+            bool verify_Upper_char = false; // boolean that signifies if the password meets upper case character requirements
+            bool verify_num = false; // boolean that signifies if the password meets number character requirements
+
+            if(args.Length >= 8 && args.Length <= 64) // if password length is between 8 and 64 characters
+            {
+                verify_length = true;
+                if(!VerifySQL(args)) // if the password does not contain SQL commands
+                {
+                    no_SQL = true;
+                    foreach (char characters in args)
+                    {
+                        if(characters.ToString() == char.ToUpper(characters).ToString()) // checks if the inputted string contains an upper case letter
+                        {
+                            verify_Upper_char = true;
+                        }
+                    }
+                    foreach (char characters in args)
+                    {
+                        if(char.IsDigit(characters)) // checks if the inputted string contains a number
+                        {
+                            verify_num = true;
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Password invalid.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Password length invaild.");
+            }
+            if(verify_length && no_SQL && verify_Upper_char && verify_num) // double checks if the password requirements are met
+            {
+                verify_pass = true; // if the requirements are met then the password is approved
+            }
+
+            // current implementatin is subject to change. This is a rough implementations and does not account for special characters
+            // certain passwords conflict with VerifySQL() function
+            //
+
+            return verify_pass;;
+        } 
         
     }
 }
