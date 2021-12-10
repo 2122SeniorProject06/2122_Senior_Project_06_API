@@ -16,21 +16,29 @@ namespace _2122_Senior_Project_06
             byte[] _cipherText = _sha256.ComputeHash(Encoding.Default.GetBytes(args));
             return Convert.ToBase64String(_cipherText);
         }
-        public static bool VerifySQL(string args) // verifies args does no correlate with SQL commands; true==invalid input, false==vail input
+        public static bool VerifySQL(string args) 
+        // verifies args does no correlate with SQL commands; true==invalid input, false==vail input
         {
             
             bool isSQLInjection = false;
-            string[] sqlCheckList = { "--", ";--", ";", "/*" ,"*/" ,"@@" ,"@" ,"char" ,"nchar" ,"varchar" ,"nvarchar" ,"alter" 
-            ,"begin", "cast", "create", "cursor", "declare", "delete", "drop", "end", "exec", "execute", "fetch", "insert", "kill"
-            ,"select", "sys", "sysobjects", "syscolumns", "table", "update"}; // array of know SQL commands
+            string[] sqlCheckList = { "--", ";--", ";", "/*" ,
+                    "*/" ,"@@" ,"@" ,"char" ,"nchar" ,"varchar" ,"nvarchar" ,
+                    "alter" ,"begin", "cast", "create", "cursor", "declare", 
+                    "delete", "drop", "end", "exec", "execute", "fetch", "insert", 
+                    "kill", "select", "sys", "sysobjects", "syscolumns", "table", 
+                    "update"}; // array of know SQL commands
             string CheckString = args.Replace("'", "''");
 
             for (int i = 0; i <= sqlCheckList.Length - 1; i++)
             {
+
                 if ((CheckString.IndexOf(sqlCheckList[i], StringComparison.OrdinalIgnoreCase) >= 0))
                 {    
+
                     isSQLInjection = true;
+
                 }
+
             }
 
             return isSQLInjection;
@@ -77,7 +85,7 @@ namespace _2122_Senior_Project_06
         }
         public static bool CreateNewAcc(string args)
         {
-            bool verify_pass = true; // boolean that signifies if the password meets requirements
+            bool verify_pass = false; // boolean that signifies if the password meets requirements
 
             bool verify_length = false; // boolean that signifies if the password meets length requirements
             bool no_SQL = false; // boolean that signifies if the password does not contain SQL commands
@@ -87,7 +95,7 @@ namespace _2122_Senior_Project_06
             if(args.Length >= 8 && args.Length <= 64) // if password length is between 8 and 64 characters
             {
                 verify_length = true;
-                if(!VerifySQL(args)) // if the password does not contain SQL commands
+                if(VerifySQL(args)) // if the password does not contain SQL commands
                 {
                     no_SQL = true;
                     foreach (char characters in args)
