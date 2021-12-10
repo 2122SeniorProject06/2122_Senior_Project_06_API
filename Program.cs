@@ -28,6 +28,22 @@ namespace _2122_Senior_Project_06
             Console.WriteLine("User inputted password: SecurePasscode@1");
             Sys_Security.printBool(verify_pass);
             Console.WriteLine();
+
+            TestAccountDatabase testDatabase = new TestAccountDatabase();
+            LoginPage loginPage = new LoginPage(testDatabase);
+
+            loginPage.Username = "test1";
+            loginPage.Password = "Test1";
+            Console.WriteLine(loginPage.ValidatePassword()); //Should print true;
+
+            loginPage.Username = "test8";
+            loginPage.Password = "Test8";
+            Console.WriteLine(loginPage.ValidatePassword()); //Should print false;
+
+            loginPage.Username = "test2";
+            loginPage.Password = "TEst2";
+            Console.WriteLine(loginPage.ValidatePassword()); //Should print false;
+
         }
     }
 }
