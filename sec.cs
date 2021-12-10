@@ -1,5 +1,4 @@
-// Created by Andrew Bevilacqua
-// Last updated: 12/07/21
+//
 
 
 using System;
@@ -8,16 +7,30 @@ using System.Security.Cryptography;
 
 namespace _2122_Senior_Project_06
 {
+    /// <summary>
+    /// Class in charge of system and cyber security.
+    /// </summary>
+    /// <remarks>  Created by Andrew Bevilacqua. Last updated on 12/07/21.  </remarks>
     public class Sys_Security
     {
-        public static string SHA256_Hash(string args) // returns the SHA256 hash of args
+        /// <summary>
+        /// Converts passed value into hashed SHA256 form.
+        /// </summary>
+        /// <param name="args">Value to hash.</param>
+        /// <returns>The hashed value.</returns>
+        public static string SHA256_Hash(string args)
         {
             SHA256Managed _sha256 = new SHA256Managed();
             byte[] _cipherText = _sha256.ComputeHash(Encoding.Default.GetBytes(args));
             return Convert.ToBase64String(_cipherText);
         }
+
+        /// <summary>
+        /// Verify input is not a SQL injection attack.
+        /// </summary>
+        /// <param name="args">The value to check.</param>
+        /// <returns>If the value is a clean input or not.</returns>
         public static bool VerifySQL(string args) 
-        // verifies args does no correlate with SQL commands; true==invalid input, false==vail input
         {
             
             bool isSQLInjection = false;
@@ -45,6 +58,11 @@ namespace _2122_Senior_Project_06
             // This is a temporary implementation, certain characters and strings that SHOULD be viable
             // in a valid password conflict with they sqlChecklist array
         }
+
+        /// <summary>
+        /// Prints the boolean value to the console.
+        /// </summary>
+        /// <param name="verify">The boolean value to print.</param>
         public static void printBool(bool verify)
         {
             if(verify)
@@ -56,6 +74,13 @@ namespace _2122_Senior_Project_06
                 Console.WriteLine("False");
             }
         }
+
+        /// <summary>
+        /// Verify if the provided password matches the stored password.
+        /// </summary>
+        /// <param name="Curr_pass">The password provided by the user.</param>
+        /// <param name="Stored_pass">The password retrieved by the database.</param>
+        /// <returns>Whether the passwords match or not.</returns>
         public static bool Verify_Pass(string Curr_pass, string Stored_pass) // verifies inputted passwords matches stored
         {
 
@@ -83,6 +108,12 @@ namespace _2122_Senior_Project_06
             Console.WriteLine("The SHA256 hash of the password, "+ Curr_pass+ ", is: " + Curr_hash);
             return verify;
         }
+
+        /// <summary>
+        /// Checks username and password against registration policies.
+        /// </summary>
+        /// <param name="args">Password to check.</param>
+        /// <returns>If the password matches the registration policies.</returns>
         public static bool CreateNewAcc(string args)
         {
             bool verify_pass = false; // boolean that signifies if the password meets requirements
