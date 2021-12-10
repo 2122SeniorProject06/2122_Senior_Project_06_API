@@ -1,6 +1,3 @@
-//
-
-
 using System;
 using System.Text;
 using System.Security.Cryptography;
@@ -10,7 +7,7 @@ namespace _2122_Senior_Project_06
     /// <summary>
     /// Class in charge of system and cyber security.
     /// </summary>
-    /// <remarks>  Created by Andrew Bevilacqua. Last updated on 12/07/21.  </remarks>
+    /// <remarks>  Created by Andrew Bevilacqua. Last updated on 12/09/21.  </remarks>
     public class Sys_Security
     {
         /// <summary>

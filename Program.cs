@@ -2,6 +2,10 @@
 
 namespace _2122_Senior_Project_06
 {
+    /// <summary>
+    /// Backend testing entry program.
+    /// </summary>
+    /// <remarks>  Created by Andrew Bevilacqua. Last updated on 12/09/21.  </remarks>
     class Program
     {
         static void Main(string[] args)
