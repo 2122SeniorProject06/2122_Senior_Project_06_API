@@ -41,6 +41,7 @@ namespace _2122_Senior_Project_06.Controllers
                 if(UserAccountsDataTable.UIDInUse(userID))
                 {
                     //return user's email, username, current badges
+                    return null;
                 }
                 else
                 {
@@ -70,6 +71,7 @@ namespace _2122_Senior_Project_06.Controllers
                     Make sure new password satifies password policy
                         Change password in database
             */
+            return Ok();
         }
 
         /// <summary>
@@ -85,6 +87,7 @@ namespace _2122_Senior_Project_06.Controllers
                 change username in database
 
             */
+            return Ok();
         }
 
         /// <summary>
@@ -104,6 +107,7 @@ namespace _2122_Senior_Project_06.Controllers
                             change email in database
 
             */
+            return Ok();
         }
 
     }
