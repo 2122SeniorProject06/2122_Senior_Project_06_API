@@ -22,25 +22,25 @@ namespace _2122_Senior_Project_06
         }
 
         [Fact]
-        public void Test2() // Test new Journal entry
+        public void Test3() // Test new Journal entry
         {
             
         }
 
         [Fact]
-        public void Test3() // Test Get list of Journals
+        public void Test4() // Test Get list of Journals
         {
             
         }
 
         [Fact]
-        public void Test4() // Test Select journal
+        public void Test5() // Test Select journal
         {
             
         }
 
         [Fact]
-        public void Test5() // Test Delete journal
+        public void Test6() // Test Delete journal
         {
             
         }
