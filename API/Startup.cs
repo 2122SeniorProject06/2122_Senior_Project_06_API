@@ -38,6 +38,7 @@ namespace _2122_Senior_Project_06
             });
            services.AddControllers();
            services.AddMvc();
+           services.AddAuthentication();
            SqlDatabase.DatabaseAccess.SetupDatabase(Configuration);
         }
 

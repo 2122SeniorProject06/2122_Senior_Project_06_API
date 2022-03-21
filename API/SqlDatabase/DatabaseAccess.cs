@@ -2,11 +2,13 @@ using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using _2122_Senior_Project_06.Types;
 namespace _2122_Senior_Project_06.SqlDatabase
 {
     /// <summary>
     /// Runs database commands.
     /// </summary>
+    /// <remarks> Paired programmed by Hugo and Andrew. </remarks>
     internal class DatabaseAccess
     {
         #region DatabaseConnection Class
@@ -18,6 +20,7 @@ namespace _2122_Senior_Project_06.SqlDatabase
         /// It hides the class from other assemblies i.e. other .csproj files.
         /// The only way to hide the class is to make it a nested private class.
         /// </remarks>
+        /// <remarks> Paired programmed by Hugo and Andrew. </remarks>
         private class DatabaseConnection
         {
             private static string _connectionString;
@@ -111,7 +114,7 @@ namespace _2122_Senior_Project_06.SqlDatabase
             catch(Exception e)
             {
                 Console.WriteLine(e.Message);
-                if(e.Message != "There is already an object named '{0}' in the database.")
+                if(e.Message != string.Format("There is already an object named '{0}' in the database.", tableName))
                 {
                     Console.WriteLine(e.GetType());
                     Console.WriteLine(e.StackTrace);

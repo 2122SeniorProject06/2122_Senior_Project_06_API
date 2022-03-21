@@ -12,14 +12,14 @@ namespace _2122_Senior_Project_06
     /// <summary>
     /// Class in charge of system and cyber security.
     /// </summary>
-    /// <remarks>  Created by Andrew Bevilacqua. Last updated on 12/09/21.  </remarks>
+    /// <remarks> Created by Andrew Bevilacqua. </remarks>
     public class Sys_Security
     {
         /// <summary>
         /// Verify input is not a SQL injection attack. 
         /// </summary>
         /// <param name="args">The value to check.</param>
-        /// <returns>If the value is a clean input or not.</returns>
+        /// <returns>If the value is a SQL injection or not.</returns>
         private static bool SQLCheck(string args) 
         {
             
@@ -138,10 +138,15 @@ namespace _2122_Senior_Project_06
          *      Public Functions
          */
 
-        //Public Functions for SQL verification, Takes in any string and returns if it contains possible SQL functions
+        /// <summary>
+        /// Takes in any string and returns if it contains possible SQL functions
+        /// </summary>
+        /// <param name="args">The value to check.</param>
+        /// <returns>If the value is clean or not.</returns>
+        /// <remarks>Public Function for SQL verification.</remarks>
         public static bool VerifySQL(string args)
         {
-            return(SQLCheck(args));
+            return(!SQLCheck(args));
         }
 
         /// <summary>
@@ -230,6 +235,31 @@ namespace _2122_Senior_Project_06
                 }
             }
             return ID;   
+        }
+
+        public static bool VerifyEmail(string potentialEmail)
+        {
+            bool[] isValid = new bool[2];
+            foreach(char c in potentialEmail)
+            {
+                if((int)c == 64) //Check for @
+                {
+                    isValid[0] = true;
+                    
+                }
+                if ((int)c == 46) //Check for .
+                {
+                    isValid[1] = true;
+                }
+            }
+            if(isValid[0] && isValid[1])
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         
     }

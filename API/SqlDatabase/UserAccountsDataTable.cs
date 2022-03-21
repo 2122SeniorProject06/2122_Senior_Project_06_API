@@ -1,5 +1,6 @@
 using System.Data;
 using _2122_Senior_Project_06.Exceptions;
+using _2122_Senior_Project_06.Types;
 
 namespace _2122_Senior_Project_06.SqlDatabase
 {
@@ -42,6 +43,18 @@ namespace _2122_Senior_Project_06.SqlDatabase
         }
 
         /// <summary>
+        /// Gets entire account information with a user ID.
+        /// </summary>
+        /// <param name="uid">The user ID.</param>
+        /// <returns>The associated user account.</returns>
+        public static UserAccount GetAccount(string uid)
+        {
+            string requirements = string.Format("{0} = '{1}'", UserAccountsItems.User_ID, uid);
+            UserAccount account = (UserAccount) DecryptRequestList(tableName, null, requirements);
+            return account;
+        }
+
+        /// <summary>
         /// Checks if email is being used in the database.
         /// </summary>
         /// <param name="email">The email to look for.</param>
@@ -67,12 +80,34 @@ namespace _2122_Senior_Project_06.SqlDatabase
         }
 
         /// <summary>
+        /// Deletes a user account.
+        /// </summary>
+        /// <param name="uid">UserID associated with the user account to delete.</param>
+        public static void DeleteUser(string uid)
+        {
+            string requirements = string.Format("{0} = '{1}'", UserAccountsItems.User_ID, uid);
+            DatabaseAccess.DeleteEntryFromTable(tableName, requirements);
+        }
+
+        /// <summary>
+        /// Updates account information with provided values.
+        /// </summary>
+        /// <param name="updatedAccount">The updated accoutn values.</param>
+        public static void UpdateUserAccount(UserAccount updatedAccount)
+        {
+            string requirements = string.Format("{0} = '{1}'", UserAccountsItems.User_ID, updatedAccount.UserID);
+            UserAccount oldInfo = GetAccount(updatedAccount.UserID);
+            oldInfo.UpdateInfo(updatedAccount);
+            DatabaseAccess.UpdateEntryInTable(tableName, oldInfo.ToSqlString(true), requirements);
+        }
+
+        /// <summary>
         /// Adds a new account to the database.
         /// </summary>
         /// <param name="newAccount">The new account.</param>
         public static void AddNewAccount(UserAccount newAccount)
         {
-            DatabaseAccess.AddEntryToTable(tableName, newAccount.ToSqlString());
+            DatabaseAccess.AddEntryToTable(tableName, newAccount.ToSqlString(false));
         }
 
         /// <summary>

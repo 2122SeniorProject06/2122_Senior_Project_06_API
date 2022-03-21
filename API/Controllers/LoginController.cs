@@ -18,6 +18,10 @@ namespace _2122_Senior_Project_06.Controllers
      *  @ RetrieveID(maybe on database end?)
      */
 
+    /// <summary>
+    /// The API's login controller.
+    /// </summary>
+    ///  <remarks> Paired programmed by Andrew and Sarah. </remarks>
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("[controller]")]

@@ -11,6 +11,10 @@ using _2122_Senior_Project_06.SqlDatabase;
 using System;
 namespace _2122_Senior_Project_06.Controllers
 {
+    /// <summary>
+    /// The API's journal controller.
+    /// </summary>
+    ///  <remarks> Paired programmed by Andrew and Sarah. </remarks>
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("[controller]")]
@@ -20,13 +24,23 @@ namespace _2122_Senior_Project_06.Controllers
         [HttpGet("GetAll")]
         public List<JournalEntry> GetAll(string userID)
         {
-            if(UserAccountsDataTable.UIDInUse(userID))
+            if(Sys_Security.VerifySQL(userID))
             {
-                return JournalsDataTable.GetAllJournals(userID);
+                if(UserAccountsDataTable.UIDInUse(userID))
+                {
+                    return JournalsDataTable.GetAllJournals(userID);
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
                 return null;
+                /*
+                SQL injection, return some form of error
+                */
             }
             
         }
@@ -35,13 +49,23 @@ namespace _2122_Senior_Project_06.Controllers
         [HttpGet("GetJournal")]
         public JournalEntry GetJournal(string journalID)
         {
-            if(JournalsDataTable.JournalIDInUse(journalID))
+            if(Sys_Security.VerifySQL(journalID))
             {
-                return JournalsDataTable.GetJournalEntry(journalID);
+                if(JournalsDataTable.JournalIDInUse(journalID))
+                {
+                    return JournalsDataTable.GetJournalEntry(journalID);
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
                 return null;
+                /*
+                SQL injection, return some form of error
+                */
             }
         }
         
@@ -49,6 +73,8 @@ namespace _2122_Senior_Project_06.Controllers
         [HttpPost("Create")]
         public IActionResult Create([FromBody] JournalEntry potentialJournal)
         {
+            
+            Console.WriteLine(string.Format("Test ID: {0}", potentialJournal.UserID));
             try
             {
                 potentialJournal.LastUpdated = DateTime.Now;
@@ -85,15 +111,25 @@ namespace _2122_Senior_Project_06.Controllers
         [HttpDelete("Delete")]
         public IActionResult Delete(string journalID)
         {
-            try
+            if(Sys_Security.VerifySQL(journalID))
             {
-                JournalsDataTable.DeleteEntry(journalID);
-                return Ok();
+                try
+                {
+                    JournalsDataTable.DeleteEntry(journalID);
+                    return Ok();
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return StatusCode(418);
+                }
             }
-            catch(Exception e)
+            else
             {
-                Console.WriteLine(e.Message);
-                return StatusCode(418);
+                return StatusCode(418); //Im a teapot
+                /*
+                SQL injection, return some form of error
+                */
             }
         }
     }

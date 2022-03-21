@@ -1,4 +1,4 @@
-namespace _2122_Senior_Project_06.SqlDatabase
+namespace _2122_Senior_Project_06.Types
 {
     internal class UserAccountsItems
     {
