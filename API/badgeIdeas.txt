@@ -1,0 +1,6 @@
+Login amount: 1, 5, 10, 25, 50, 69, 75, 100, 150,..., 420
+Create Journal: 1, 7, 14, 30, 90, 180, 365
+View Journal: 1
+Update Journal: 1
+Fill in all check in items: 1
+Fill all Checkin's in a day: 1, 7, 14, 30, 90, 180, 365
