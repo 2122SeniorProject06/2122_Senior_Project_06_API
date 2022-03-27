@@ -49,53 +49,42 @@ namespace _2122_Senior_Project_06.Controllers
          *  @ CreateNewUser
          */
         [HttpPost("Create")]
-        public int CreateNewUser([FromBody] NewAccountModel potentialAccount)
+        public bool[] CreateNewUser([FromBody] NewAccountModel potentialAccount)
         {
-            int val = 0;
+            bool[] isValid = new bool[3];
             if(Sys_Security.VerifyEmail(potentialAccount.Email) && 
                 !UserAccountsDataTable.EmailInUse(potentialAccount.Email))//if email is an email and if email is not already in use
             {
-                val += 0;
+                isValid[0] = true;
             }
-            else
+            if(potentialAccount.Username == null)//checks if user name is empty
             {
-                val += 1;
-            }
-            if(potentialAccount.Username != null)//checks if user name is empty
-            {
-                val += 0;
-            }
-            else
-            {
-                val += 3;
+                isValid[1] = true;
             }
             if(Sys_Security.VerifyNewPass(potentialAccount.Password))//checks if password meets requirements
             {
-                val += 0;
+                isValid[2] = true;
             }
-            else
-            {
-                val += 9;
-                /* 
-                    Return error message "Password does not meet password requirements."
-                    Include password policy:
-                            - Minimum of 8 character
-                            - One upper case letter
-                            - One lower case letter
-                            - One number
-                */
-            }
-            if(val == 0) //If everything is ok then we create account and return val(which will be 0)
-            {
-                UserAccount newAccount = new UserAccount(potentialAccount.Username, potentialAccount.Email,
-                                                        Sys_Security.SHA256_Hash(potentialAccount.Password));
-                UserAccountsDataTable.AddNewAccount(newAccount);
-                return val;
-            }
-            else//if an error occured then we return val. Val could be: 1,3,9,4,10,12
-            {
-                return val;
-            }
+            
+            /* 
+                Return error message "Password does not meet password requirements."
+                Include password policy:
+                        - Minimum of 8 character
+                        - One upper case letter
+                        - One lower case letter
+                        - One number
+            */
+            // if(!isValid) //If everything is ok then we create account
+            // {
+            //     UserAccount newAccount = new UserAccount(potentialAccount.Username, potentialAccount.Email,
+            //                                             Sys_Security.SHA256_Hash(potentialAccount.Password));
+            //     UserAccountsDataTable.AddNewAccount(newAccount);
+            // }
+            return isValid;
+            // else  if an error occured then we return val. Val could be: 1,3,9,4,10,12,13
+            // {
+                
+            // }
         }
 
         // [HttpPost("ErrorMess")]

@@ -148,5 +148,29 @@ namespace _2122_Senior_Project_06.Controllers
                 */
             }
         }
+        /*
+            Possible Error handling for HTML injections, attacker send false UID or JID
+            Obtained from: https://docs.microsoft.com/en-us/aspnet/web-forms/overview/getting-started/getting-started-with-aspnet-45-web-forms/aspnet-error-handling
+            try
+            {
+                file.ReadBlock(buffer, index, buffer.Length);
+            }
+            catch (FileNotFoundException e)
+            {
+                Server.Transfer("NoFileErrorPage.aspx", true);
+            }
+            catch (System.IO.IOException e)
+            {
+                Server.Transfer("IOErrorPage.aspx", true);
+            }
+
+            finally
+            {
+                if (file != null)
+                {
+                    file.Close();
+                }
+            }
+        */
     }
 }

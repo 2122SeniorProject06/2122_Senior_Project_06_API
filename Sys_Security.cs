@@ -155,17 +155,21 @@ namespace _2122_Senior_Project_06
         public static bool VerifyPass(string curr_password, string email)
         {
             bool passCheckResult = false;
-            try
+            if(VerifyEmail(email) && UserAccountsDataTable.EmailInUse(email))
             {
-                passCheckResult = PassCheck(curr_password,email);
-            }
-            catch (IssueWithCredentialException)
-            {
-            }
-            catch (Exception e)
-            {
+                try
+                {
+                    passCheckResult = PassCheck(curr_password,email);
+                }
+                catch (IssueWithCredentialException)
+                {
+                }
+                catch (Exception e)
+                {
                 Console.Write(e.Message);
+                }
             }
+            
             return passCheckResult;
         }
 
