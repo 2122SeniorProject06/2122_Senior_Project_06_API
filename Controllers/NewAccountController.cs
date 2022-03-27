@@ -49,48 +49,97 @@ namespace _2122_Senior_Project_06.Controllers
          *  @ CreateNewUser
          */
         [HttpPost("Create")]
-        public bool CreateNewUser([FromBody] NewAccountModel potentialAccount)
+        public int CreateNewUser([FromBody] NewAccountModel potentialAccount)
         {
-            if(Sys_Security.VerifyEmail(potentialAccount.Email))
+            int val = 0;
+            if(Sys_Security.VerifyEmail(potentialAccount.Email) && 
+                !UserAccountsDataTable.EmailInUse(potentialAccount.Email))//if email is an email and if email is not already in use
             {
-                if(!UserAccountsDataTable.EmailInUse(potentialAccount.Email))
-                {
-                    if(Sys_Security.VerifyNewPass(potentialAccount.Password))
-                    {
+                val += 0;
+            }
+            else
+            {
+                val += 1;
+            }
+            if(potentialAccount.Username != null)//checks if user name is empty
+            {
+                val += 0;
+            }
+            else
+            {
+                val += 3;
+            }
+            if(Sys_Security.VerifyNewPass(potentialAccount.Password))//checks if password meets requirements
+            {
+                val += 0;
+            }
+            else
+            {
+                val += 9;
+                /* 
+                    Return error message "Password does not meet password requirements."
+                    Include password policy:
+                            - Minimum of 8 character
+                            - One upper case letter
+                            - One lower case letter
+                            - One number
+                */
+            }
+            if(val == 0) //If everything is ok then we create account and return val(which will be 0)
+            {
+                UserAccount newAccount = new UserAccount(potentialAccount.Username, potentialAccount.Email,
+                                                        Sys_Security.SHA256_Hash(potentialAccount.Password));
+                UserAccountsDataTable.AddNewAccount(newAccount);
+                return val;
+            }
+            else//if an error occured then we return val. Val could be: 1,3,9,4,10,12
+            {
+                return val;
+            }
+        }
 
-                    UserAccount newAccount = new UserAccount(potentialAccount.Username, potentialAccount.Email,
-                                                            Sys_Security.SHA256_Hash(potentialAccount.Password));
-                    UserAccountsDataTable.AddNewAccount(newAccount);
-                    return true;
-                    }
-                    else
-                    {
-                        return false;
-                        /* 
-                            Return error message "Password does not meet password requirements."
-                            Include password policy:
-                                    - Minimum of 8 character
-                                    - One upper case letter
-                                    - One lower case letter
-                                    - One number
-                        */
-                    }
-                }
-                else
-                {
-                    return false;
-                    /* 
-                    Return error message "Email is already in use."
-                    */
-                }
+        // [HttpPost("ErrorMess")]
+        // public int checkInput([FromBody] NewAccountModel potentialAccount)
+        // {
+        //     bool check0 = false;
+        //     bool check1 = false;
+        //     bool check2 = false;
+        //     int value = 0;
+        //     if(potentialAccount.Username == null)
+        //     {
+                
+        //     }
+        //     if(Sys_Security.VerifyEmail(potentialAccount.Email))
+        //     {
+        //         value += 1;
+        //     }
+        // }
+        [HttpPost("EmailCheck")]
+        public bool CheckEmail([FromBody] string curr_email)
+        {
+            if(Sys_Security.VerifyEmail(curr_email))
+            {
+                return true;
             }
             else
             {
                 return false;
-                /*
-                Return error message "Email is not valid"
-                */
             }
+
+        }
+
+        [HttpPost("PassCheck")]
+        public bool CheckPass([FromBody] string curr_pass)
+        {
+            if(Sys_Security.VerifyNewPass(curr_pass))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 }

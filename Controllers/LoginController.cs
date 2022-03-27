@@ -35,6 +35,7 @@ namespace _2122_Senior_Project_06.Controllers
         [HttpPost("Authenticate")]
         public string AuthenticateUser([FromBody]LoginPage loginModel){
             string userID = null;
+
             if(Sys_Security.VerifyPass(loginModel.Password, loginModel.Email))
             {
                 userID = UserAccountsDataTable.GetUIDFromEmail(loginModel.Email);
