@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using _2122_Senior_Project_06.Models;
 using _2122_Senior_Project_06.SqlDatabase;
 using _2122_Senior_Project_06.Types;
+using _2122_Senior_Project_06.Exceptions;
 
 namespace _2122_Senior_Project_06.Controllers
 {
@@ -61,9 +62,15 @@ namespace _2122_Senior_Project_06.Controllers
             {
                 isValid[1] = true;
             }
-            if(Sys_Security.VerifyNewPass(potentialAccount.Password))//checks if password meets requirements
+            try{
+                if(Sys_Security.VerifyNewPass(potentialAccount.Password))//checks if password meets requirements
+                {
+                    isValid[2] = true;
+                }
+            }
+            catch(IssueWi)
             {
-                isValid[2] = true;
+
             }
             
             /* 

@@ -12,5 +12,9 @@ namespace  _2122_Senior_Project_06.Models
         public string Password { get; set; }
 
         public string Email { get; set; }
+
+        public bool[] VerificationResults {get; set;}
+
+        public string[] VerificationErrors {get; set;}
     }
 }

@@ -98,15 +98,19 @@ namespace _2122_Senior_Project_06
         /// </summary>
         /// <param name="args">Password to check.</param>
         /// <returns>If the password matches the registration policies.</returns>
-        private static bool[] NPassCheck(string args)
+        private static bool NPassCheck(string args)
         {
-            bool[] isValid = new bool[5];
+            bool[] isValid = new bool[4];
+            string[] errorTypes = {"The password must be at least more than 8 lengths.",
+                                    "The password must contain at least one lowercase character.",
+                                    "The password must contain at least one capital character.",
+                                    "The password must contain at least one number." };
+            string errorMessage = string.Empty;
             /*
                 [0]:between character requirements
                 [1]:has lowercase letter
                 [2]:has capital letter
                 [3]:has number
-                [4]:all is valid
             */
 
             if(args.Length >= 8 && args.Length <= 64)
@@ -129,11 +133,24 @@ namespace _2122_Senior_Project_06
                 }
             }
 
-            if(isValid[0] && isValid[1] && isValid[2] && isValid[3])
+            for(int i = 0; i < isValid.Length; i++)
             {
-                isValid[4] = true;
+                if(isValid[i] == false)
+                {
+                    if(string.IsNullOrEmpty(errorMessage))
+                    {
+                        errorMessage = "The inputted password is invalid for the following reasons:";
+                    }
+                    errorMessage += "\n" + errorTypes[i];
+                }
             }
-            return isValid;
+
+            if(!string.IsNullOrEmpty(errorMessage))
+            {
+                throw new IssueWithCredentialException(errorMessage);
+            }
+
+            return true;
         }
 
         /*
@@ -177,7 +194,7 @@ namespace _2122_Senior_Project_06
 
         //Verifies Newpassword satifies password requirements
         //Current implementation: NewPassword is sent as plaintext(Not encoded), returns a boolean if password satifies requirements
-        public static bool[] VerifyNewPass(string args)
+        public static bool VerifyNewPass(string args)
         {
             return(NPassCheck(args));
         }
