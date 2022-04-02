@@ -98,40 +98,42 @@ namespace _2122_Senior_Project_06
         /// </summary>
         /// <param name="args">Password to check.</param>
         /// <returns>If the password matches the registration policies.</returns>
-        private static bool NPassCheck(string args)
+        private static bool[] NPassCheck(string args)
         {
-            bool verify_length = false;
-            bool verify_charl= false;
-            bool verify_charL = false; 
-            bool verify_num = false;
+            bool[] isValid = new bool[5];
+            /*
+                [0]:between character requirements
+                [1]:has lowercase letter
+                [2]:has capital letter
+                [3]:has number
+                [4]:all is valid
+            */
 
             if(args.Length >= 8 && args.Length <= 64)
             {
-                verify_length = true;
+                isValid[0] = true;
                 foreach (char characters in args)
                 {
                     if((int)characters >= 97 && (int)characters <= 122)
                     {
-                        verify_charl = true;
+                        isValid[1] = true;
                     }
                     if ((int)characters >= 65 && (int)characters <= 90)
                     {
-                        verify_charL = true;
+                        isValid[2] = true;
                     }
                     if ((int)characters >= 48 && (int)characters <= 57)
                     {
-                        verify_num = true;
+                        isValid[3] = true;
                     }
                 }
             }
-            if(verify_length && verify_charl && verify_charL && verify_num)
+
+            if(isValid[0] && isValid[1] && isValid[2] && isValid[3])
             {
-                return true;
+                isValid[4] = true;
             }
-            else
-            {
-                return false;
-            }
+            return isValid;
         }
 
         /*
@@ -175,7 +177,7 @@ namespace _2122_Senior_Project_06
 
         //Verifies Newpassword satifies password requirements
         //Current implementation: NewPassword is sent as plaintext(Not encoded), returns a boolean if password satifies requirements
-        public static bool VerifyNewPass(string args)
+        public static bool[] VerifyNewPass(string args)
         {
             return(NPassCheck(args));
         }
