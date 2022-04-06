@@ -79,8 +79,49 @@ namespace _2122_Senior_Project_06.Controllers
             {
                 return Forbid();
             }
-            
+            /*
+                Should we verify password first?
+                        Password stored in database is hashed so we cant tell what it is from our end
+                UI sends in curr_pass and user's email, verify password matches continue to change/update password
+                    Make sure new password satifies password policy
+                        Change password in database
+            */
+        }
 
+        /// <summary>
+        /// Changes a users username while they are in their account settings
+        /// As far as verification UI may need to send userID to both verify, pull current username, and change username
+        /// </summary>
+        /// <param name="userID">UserID obtained through login</param>
+        /// <returns>OK() if change as successful, or error code if not?</returns>
+        [HttpPut("UpdateUsername")]
+        public IActionResult ChangeUsername()
+        {
+            /*
+                change username in database
+
+            */
+            return Ok();
+        }
+
+        /// <summary>
+        /// Changes a users email while they are in their account settings
+        /// As far as verification UI may need to send userID to both verify, pull current email, and change email
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>OK() if change as successful, or error code if not?</returns>
+        [HttpPut("UpdateEmail")]
+        public IActionResult ChangeEmail()
+        {
+            /*
+                Verify that the email is in use
+                    if email is not in use then something reaaaal bad has happened
+                    if email is in use then continue with change/update
+                        verfiy email is indeed an email
+                            change email in database
+
+            */
+            return Ok();
         }
         /*
             get badges function?
