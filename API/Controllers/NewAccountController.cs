@@ -27,42 +27,63 @@ namespace _2122_Senior_Project_06.Controllers
          *  @ CreateNewUser
          */
         [HttpPost("Create")]
-        public bool[] CreateNewUser([FromBody] NewAccountModel potentialAccount)
+        public NewAccountModel CreateNewUser([FromBody] NewAccountModel potentialAccount)
         {
-            bool[] isValid = new bool[4];
+            potentialAccount.VerificationErrors = new string[4];
+            potentialAccount.VerificationResults = new bool[4];
             string[] errorTypes = {"Email is invalid.",
                                     "Username is invalid.",
                                     "Password is invalid.",
                                     "Passwords do not match."};
-            /*
-                isValid Key
-                [0]: if email is valid
-                [1]: if passwords match
-                [2]: if username is valid
-                [3]: if password is valid
-            */
             
             // {"The password must be at least more than 8 lengths.",
             //  "The password must contain at least one lowercase character.",
             //  "The password must contain at least one capital character.",
             //  "The password must contain at least one number." };
-            string errorMessage = string.Empty;
-            if(Sys_Security.VerifyEmail(potentialAccount.Email) && 
-                !UserAccountsDataTable.EmailInUse(potentialAccount.Email))//if email is an email and if email is not already in use
+            try
             {
-                isValid[0] = true;
+                if(Sys_Security.VerifyEmail(potentialAccount.Email))//if email is an email and if email is not already in use
+                {
+                    if(!UserAccountsDataTable.EmailInUse(potentialAccount.Email))
+                        potentialAccount.VerificationResults[0] = true;
+
+                    else throw new IssueWithCredentialException("Email already in use.");
+                }
             }
+            catch(IssueWithCredentialException e)
+            {
+                potentialAccount.VerificationResults[0] = false;
+                potentialAccount.VerificationErrors[0] = e.Message;
+            }
+
             if(potentialAccount.Password == potentialAccount.confirmedPassword)
             {
-                isValid[1] = true;
+                potentialAccount.VerificationResults[1] = true;
             }
+            else
+            {
+                potentialAccount.VerificationResults[1] = false;
+                potentialAccount.VerificationErrors[1] = "Does not match password.";
+            }
+
             if(potentialAccount.Username == null)//checks if user name is empty
             {
-                isValid[2] = true;
+                potentialAccount.VerificationResults[2] = true;
             }
-            if(Sys_Security.VerifyNewPass(potentialAccount.Password))//checks if password meets requirements
+            else
             {
-                isValid[3] = true;
+                potentialAccount.VerificationResults[2] = false;
+                potentialAccount.VerificationErrors[2] = "Username cannot be blank.";
+            }
+
+            try
+            {
+
+            }
+            catch(IssueWithCredentialException e)
+            {
+                potentialAccount.VerificationResults[3] = false;
+                potentialAccount.VerificationErrors[3] = e.Message;
             }
             
             /* 
@@ -79,7 +100,12 @@ namespace _2122_Senior_Project_06.Controllers
             //                                             Sys_Security.SHA256_Hash(potentialAccount.Password));
             //     UserAccountsDataTable.AddNewAccount(newAccount);
             // }
-            return isValid;
+
+            potentialAccount.confirmedPassword = null;
+            potentialAccount.Email = null;
+            potentialAccount.Password = null;
+            potentialAccount.Username = null;
+            return potentialAccount;
         }
 
         // [HttpPost("ErrorMess")]

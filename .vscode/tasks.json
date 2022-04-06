@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/2122_Senior_Project_06.csproj",
+                "${workspaceFolder}/API/2122_Senior_Project_06.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/2122_Senior_Project_06.csproj",
+                "${workspaceFolder}/API/2122_Senior_Project_06.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/2122_Senior_Project_06.csproj",
+                "${workspaceFolder}/API/2122_Senior_Project_06.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

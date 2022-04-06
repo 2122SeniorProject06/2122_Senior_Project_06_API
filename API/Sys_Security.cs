@@ -133,7 +133,20 @@ namespace _2122_Senior_Project_06
             }
             else
             {
-                return false;
+                string[] errorTypes = {"- The password must be at least more than 8 lengths.",
+                                       "- The password must contain at least one lowercase character.",
+                                       "- The password must contain at least one capital character.",
+                                       "- The password must contain at least one number." };
+                string message = "";
+                for(int i = 0; i < isValid.Length; i++)
+                {
+                    if(!isValid[i])
+                    {
+                        message += '\n' + errorTypes[i];
+                        if(i == 0) break;
+                    }
+                }
+                throw new IssueWithCredentialException(message.Remove(0,1));
             }
         }
 
@@ -248,7 +261,7 @@ namespace _2122_Senior_Project_06
             }
             else
             {
-                return false;
+                throw new IssueWithCredentialException("Not a valid email.");
             }
         }
         
