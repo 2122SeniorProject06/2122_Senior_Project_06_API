@@ -22,29 +22,6 @@ namespace _2122_Senior_Project_06.Controllers
     [Route("[controller]")]
     public class NewAccountController : ControllerBase
     {
-        [HttpPost("SuperSecretBaseValueGeneration")]
-        public string GenerateUsers(string password)
-        {
-            if(password == "TheKeyToSecrecyIsLength")
-            {
-                UserAccount sarah = new UserAccount("Sarah", "email1@gmail.com", Sys_Security.SHA256_Hash("G00lsby"));
-                UserAccount hugo = new UserAccount ("Hugo", "email2@gmail.com", Sys_Security.SHA256_Hash("M@zariego"));
-                UserAccount andrew = new UserAccount ("Andrew", "email3@gmail.com", Sys_Security.SHA256_Hash("Bev!lacqua"));
-                UserAccount ulysses = new UserAccount ("Ulysses", "email4@gmail.com", Sys_Security.SHA256_Hash("Riv&ra"));
-                UserAccount dani = new UserAccount ("Dani", "email5@gmail.com", Sys_Security.SHA256_Hash("Mar+inez"));
-                UserAccountsDataTable.AddNewAccount(sarah);
-                UserAccountsDataTable.AddNewAccount(hugo);
-                UserAccountsDataTable.AddNewAccount(andrew);
-                UserAccountsDataTable.AddNewAccount(ulysses);
-                UserAccountsDataTable.AddNewAccount(dani);
-                return "MissionComplete";
-            }
-
-            else if(password == "SuperSecretBaseValueGenerationPassword")
-                return "You are so stupid. Did you really think that we would just give you the password?";
-
-            else return "Incorrect Password. The correct password is \"SuperSecretBaseValueGenerationPassword\".";
-        }
         /*
          * The following controller processes a new account being created
          *  @ CreateNewUser
@@ -52,25 +29,40 @@ namespace _2122_Senior_Project_06.Controllers
         [HttpPost("Create")]
         public bool[] CreateNewUser([FromBody] NewAccountModel potentialAccount)
         {
-            bool[] isValid = new bool[3];
+            bool[] isValid = new bool[4];
+            string[] errorTypes = {"Email is invalid.",
+                                    "Username is invalid.",
+                                    "Password is invalid.",
+                                    "Passwords do not match."};
+            /*
+                isValid Key
+                [0]: if email is valid
+                [1]: if passwords match
+                [2]: if username is valid
+                [3]: if password is valid
+            */
+            
+            // {"The password must be at least more than 8 lengths.",
+            //  "The password must contain at least one lowercase character.",
+            //  "The password must contain at least one capital character.",
+            //  "The password must contain at least one number." };
+            string errorMessage = string.Empty;
             if(Sys_Security.VerifyEmail(potentialAccount.Email) && 
                 !UserAccountsDataTable.EmailInUse(potentialAccount.Email))//if email is an email and if email is not already in use
             {
                 isValid[0] = true;
             }
-            if(potentialAccount.Username == null)//checks if user name is empty
+            if(potentialAccount.Password == potentialAccount.confirmedPassword)
             {
                 isValid[1] = true;
             }
-            try{
-                if(Sys_Security.VerifyNewPass(potentialAccount.Password))//checks if password meets requirements
-                {
-                    isValid[2] = true;
-                }
-            }
-            catch(IssueWi)
+            if(potentialAccount.Username == null)//checks if user name is empty
             {
-
+                isValid[2] = true;
+            }
+            if(Sys_Security.VerifyNewPass(potentialAccount.Password))//checks if password meets requirements
+            {
+                isValid[3] = true;
             }
             
             /* 
@@ -88,10 +80,6 @@ namespace _2122_Senior_Project_06.Controllers
             //     UserAccountsDataTable.AddNewAccount(newAccount);
             // }
             return isValid;
-            // else  if an error occured then we return val. Val could be: 1,3,9,4,10,12,13
-            // {
-                
-            // }
         }
 
         // [HttpPost("ErrorMess")]

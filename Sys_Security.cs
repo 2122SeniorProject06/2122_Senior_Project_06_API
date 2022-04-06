@@ -101,11 +101,6 @@ namespace _2122_Senior_Project_06
         private static bool NPassCheck(string args)
         {
             bool[] isValid = new bool[4];
-            string[] errorTypes = {"The password must be at least more than 8 lengths.",
-                                    "The password must contain at least one lowercase character.",
-                                    "The password must contain at least one capital character.",
-                                    "The password must contain at least one number." };
-            string errorMessage = string.Empty;
             /*
                 [0]:between character requirements
                 [1]:has lowercase letter
@@ -132,25 +127,14 @@ namespace _2122_Senior_Project_06
                     }
                 }
             }
-
-            for(int i = 0; i < isValid.Length; i++)
+            if(isValid[0] && isValid[1] && isValid[2] && isValid[3])
             {
-                if(isValid[i] == false)
-                {
-                    if(string.IsNullOrEmpty(errorMessage))
-                    {
-                        errorMessage = "The inputted password is invalid for the following reasons:";
-                    }
-                    errorMessage += "\n" + errorTypes[i];
-                }
+                return true;
             }
-
-            if(!string.IsNullOrEmpty(errorMessage))
+            else
             {
-                throw new IssueWithCredentialException(errorMessage);
+                return false;
             }
-
-            return true;
         }
 
         /*
@@ -176,17 +160,7 @@ namespace _2122_Senior_Project_06
             bool passCheckResult = false;
             if(VerifyEmail(email) && UserAccountsDataTable.EmailInUse(email))
             {
-                try
-                {
                     passCheckResult = PassCheck(curr_password,email);
-                }
-                catch (IssueWithCredentialException)
-                {
-                }
-                catch (Exception e)
-                {
-                Console.Write(e.Message);
-                }
             }
             
             return passCheckResult;

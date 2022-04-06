@@ -10,6 +10,8 @@ namespace  _2122_Senior_Project_06.Models
         public string Username { get; set; }
 
         public string Password { get; set; }
+        
+        public string confirmedPassword { get; set; }
 
         public string Email { get; set; }
 
