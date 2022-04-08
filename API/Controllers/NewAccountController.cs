@@ -66,7 +66,7 @@ namespace _2122_Senior_Project_06.Controllers
                 potentialAccount.VerificationErrors[1] = "Does not match password.";
             }
 
-            if(potentialAccount.Username == null)//checks if user name is empty
+            if(potentialAccount.Username != null)//checks if user name is empty
             {
                 potentialAccount.VerificationResults[2] = true;
             }
@@ -78,7 +78,7 @@ namespace _2122_Senior_Project_06.Controllers
 
             try
             {
-
+                potentialAccount.VerificationResults[3] = Sys_Security.VerifyNewPass(potentialAccount.Password);
             }
             catch(IssueWithCredentialException e)
             {
