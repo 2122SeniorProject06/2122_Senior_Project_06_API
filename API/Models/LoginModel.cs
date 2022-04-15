@@ -13,5 +13,7 @@ namespace  _2122_Senior_Project_06.Models
         public string Email{ get; set; }
 
         public string Password{ get; set; }
+
+        public string UserPrefrences{ get; set; }
     }
 }

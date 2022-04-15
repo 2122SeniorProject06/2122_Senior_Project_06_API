@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Cors;
 using System.Data;
 using _2122_Senior_Project_06.Types;
 using _2122_Senior_Project_06.SqlDatabase;
+using _2122_Senior_Project_06.Exceptions;
 
 namespace _2122_Senior_Project_06.Controllers
 {
@@ -29,6 +30,7 @@ namespace _2122_Senior_Project_06.Controllers
     [Route("[controller]")]
     public class AccountController : ControllerBase
     {
+
         /// <summary>
         /// Returns a user's email, username, current badges given a userID
         /// </summary>
@@ -57,16 +59,42 @@ namespace _2122_Senior_Project_06.Controllers
 
         /// <summary>
         /// Updates users info no matter type of data
+        /// User can update Email, Username or Password
         /// </summary>
         /// <param name="UserAccount">UserAccount is obtained dependent on what the user would like to update</param>
         /// <returns>IActionResult, Ok() if successful, Forbid() if invalid/user DNE</returns>
         [HttpPut("UpdateUser")]
-        public IActionResult UpdateUser([FromBody]UserAccount updatedUser) //might need to send UID seperate
+        public IActionResult UpdateUser([FromBody]AccountModel updatedUser) //might need to send UID seperate
         {
-            if(Sys_Security.VerifySQL(updatedUser.UserID))
+            if(Sys_Security.VerifySQL(updatedUser.userID))
             {
-                if(UserAccountsDataTable.UIDInUse(updatedUser.UserID))
+                if(UserAccountsDataTable.UIDInUse(updatedUser.userID))
                 {
+                    // if(updatedUser.Username != null)
+                    // {
+                    //     try
+                    //     {
+                    //         if()
+                    //     }
+                    // }
+                        if(updatedUser.new_Password != null)
+                        {
+
+                        }
+                        if(updatedUser.new_Email != null)
+                        {
+                            try
+                            {
+                                if(Sys_Security.VerifyEmail(updatedUser.new_Email))//if email is an email and if email is not already in use
+                                {
+                                    if(!UserAccountsDataTable.EmailInUse(updatedUser.new_Email))
+                                        updatedUser.VerificationResults[0] = true;
+
+                                    else throw new IssueWithCredentialException("Email already in use.");
+                                }
+                            }
+                        }
+                        
                     UserAccountsDataTable.UpdateUserAccount(updatedUser);
                     return Ok();
                 }
