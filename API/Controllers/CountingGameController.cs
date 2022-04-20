@@ -17,9 +17,9 @@ namespace _2122_Senior_Project_06.Controllers
     public class CountingGameController : ControllerBase
     {
         [HttpGet("GetVal")]
-        public int GenerateValue(CountingGame gameInfo)
+        public int GenerateValue(int startingValue)
         {
-            return GenCountingVal(gameInfo.startingValue);
+            return GenCountingVal(startingValue);
         }
 
         private static int GenCountingVal(int str_val)
