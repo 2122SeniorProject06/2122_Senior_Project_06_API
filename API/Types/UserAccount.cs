@@ -1,3 +1,4 @@
+using _2122_Senior_Project_06.Models;
 namespace  _2122_Senior_Project_06.Types
 {
     /// <summary>
@@ -31,6 +32,14 @@ namespace  _2122_Senior_Project_06.Types
             Password = password;
             Email = email;
             UserID = Sys_Security.GenID(UserID,true);
+        }
+
+        public UserAccount(AccountModel account)
+        {
+            Username = account.new_Username;
+            Password = account.new_Password;
+            Email = account.new_Email;
+            UserID = account.userID;
         }
 
         /// <summary>

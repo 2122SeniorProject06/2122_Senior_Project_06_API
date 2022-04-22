@@ -6,5 +6,7 @@ namespace _2122_Senior_Project_06.Types
         public static string Username = "UserName";
         public static string Password = "Password";
         public static string Email = "EMail";
+        public static string DarkMode = "DarkMode";
+        public static string Background = "Background";
     }
 }

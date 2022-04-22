@@ -52,10 +52,15 @@ namespace _2122_Senior_Project_06.Controllers
             {
                 string HugosID = UserAccountsDataTable.GetUIDFromEmail("email2@gmail.com");
                 string AndrewsID = UserAccountsDataTable.GetUIDFromEmail("email3@gmail.com");
+                string[] activity = { ActivityItems.Encourage, ActivityItems.Focus, ActivityItems.Relax, ActivityItems.Ground,
+                                      ActivityItems.Relax, ActivityItems.Other, ActivityItems.Focus, ActivityItems.Focus,
+                                      ActivityItems.Ground, ActivityItems.Encourage };
+                bool[] hadAttack = {true, true, true, true, true, false, true, true, true, false};
                 for(int i = 0; i < 10; i++)
                 {
                     string userID = i % 2 == 0 ? HugosID : AndrewsID;
-                    JournalEntry newEntry = new JournalEntry(string.Format("Journal #{0}", i), string.Format("{0} x 10 = {1}", i, i*10), userID, DateTime.Now);
+                    JournalEntry newEntry = new JournalEntry(string.Format("Journal #{0}", i), string.Format("{0} x 10 = {1}", i, i*10), userID, DateTime.Now,
+                                                             hadAttack[i], activity[i], !(i % 5 == 0));
                     JournalsDataTable.AddNewEntry(newEntry);
                 }
             }
@@ -93,8 +98,9 @@ namespace _2122_Senior_Project_06.Controllers
             try
             {
                 potentialJournal.LastUpdated = DateTime.Now;
-                JournalEntry newEntry = new JournalEntry(potentialJournal.Title, potentialJournal.Body, 
-                                                        potentialJournal.UserID, potentialJournal.LastUpdated);
+                JournalEntry newEntry = new JournalEntry(potentialJournal.Title, potentialJournal.Body, potentialJournal.UserID, 
+                                                         potentialJournal.LastUpdated, potentialJournal.HadAttack,
+                                                         potentialJournal.Activity, potentialJournal.WasEffective);
                 JournalsDataTable.AddNewEntry(newEntry);
                 return Ok();
             }

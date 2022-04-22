@@ -93,9 +93,13 @@ namespace _2122_Senior_Project_06.Controllers
                                     else throw new IssueWithCredentialException("Email already in use.");
                                 }
                             }
+                            catch
+                            {
+
+                            }
                         }
                         
-                    UserAccountsDataTable.UpdateUserAccount(updatedUser);
+                    UserAccountsDataTable.UpdateUserAccount(new UserAccount(updatedUser));
                     return Ok();
                 }
                 else

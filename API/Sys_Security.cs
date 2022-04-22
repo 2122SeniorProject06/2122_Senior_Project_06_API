@@ -265,6 +265,5 @@ namespace _2122_Senior_Project_06
                 throw new IssueWithCredentialException("Not a valid email.");
             }
         }
-        
     }
 }

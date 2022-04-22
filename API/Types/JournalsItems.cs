@@ -7,5 +7,8 @@ namespace _2122_Senior_Project_06.Types
         public static string Body = "Body";
         public static string UserID = "UserID";
         public static string LastUpdated = "LastUpdated";
+        public static string HadAttack = "HadAttack";
+        public static string Activity = "Activity";
+        public static string WasEffective = "WasEffective";
     }
 }

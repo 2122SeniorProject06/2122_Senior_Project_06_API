@@ -83,12 +83,16 @@ namespace _2122_Senior_Project_06.SqlDatabase
                                                         UserAccountsItems.Username,
                                                         UserAccountsItems.Password,
                                                         UserAccountsItems.Email);
-            string journalValues = string.Format("{0} varchar(9), {1} varchar(256), {2} varchar(256), {3} varchar(9), {4} DateTime",
+            string journalValues = string.Format("{0} varchar(9), {1} varchar(256), {2} varchar(256), {3} varchar(9), {4} DateTime, " +
+                                                 "{5} bit, {6} varchar(20), {7} bit",
                                                         JournalsItems.JournalID,
                                                         JournalsItems.Title,
                                                         JournalsItems.Body,
                                                         JournalsItems.UserID,
-                                                        JournalsItems.LastUpdated);
+                                                        JournalsItems.LastUpdated,
+                                                        JournalsItems.HadAttack,
+                                                        JournalsItems.Activity,
+                                                        JournalsItems.WasEffective);
             string[] tableNames = {"UserAccounts", "Journals"};
             string[] tableValues = {userAccountValues, journalValues};
             int index = 0;

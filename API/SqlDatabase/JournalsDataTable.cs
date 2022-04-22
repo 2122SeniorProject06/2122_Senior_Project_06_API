@@ -99,11 +99,8 @@ namespace _2122_Senior_Project_06.SqlDatabase
                 desiredValues = new List<JournalEntry>();
                 foreach(DataRow entryInfo in allEntriesFound.Rows)
                 {
-                    if(entryInfo.ItemArray.Length == 5)
-                    {
-                        JournalEntry result = new JournalEntry(entryInfo); 
-                        desiredValues.Add(result);
-                    }
+                    JournalEntry result = new JournalEntry(entryInfo); 
+                    desiredValues.Add(result);
                 }
             }
             return desiredValues;
