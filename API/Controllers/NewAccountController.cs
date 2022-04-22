@@ -94,12 +94,12 @@ namespace _2122_Senior_Project_06.Controllers
                         - One lower case letter
                         - One number
             */
-            // if(!isValid) //If everything is ok then we create account
-            // {
-            //     UserAccount newAccount = new UserAccount(potentialAccount.Username, potentialAccount.Email,
-            //                                             Sys_Security.SHA256_Hash(potentialAccount.Password));
-            //     UserAccountsDataTable.AddNewAccount(newAccount);
-            // }
+            if(!potentialAccount.VerificationResults.Contains(false)) //If everything is ok then we create account
+            {
+                UserAccount newAccount = new UserAccount(potentialAccount.Username, potentialAccount.Email,
+                                                        Sys_Security.SHA256_Hash(potentialAccount.Password));
+                UserAccountsDataTable.AddNewAccount(newAccount);
+            }
 
             potentialAccount.confirmedPassword = null;
             potentialAccount.Email = null;
