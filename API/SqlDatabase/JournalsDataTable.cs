@@ -82,6 +82,14 @@ namespace _2122_Senior_Project_06.SqlDatabase
             return associatedAccounts.Count != 0;
         }
 
+        public static List<JournalEntry> GetMetricsWithUserId(string userID)
+        {
+            string itemsToSelect = string.Format("{0}, {1}, {2}", JournalsItems.HadAttack, JournalsItems.Activity, JournalsItems.WasEffective);
+            string requirements = string.Format("{0} = '{1}'", JournalsItems.UserID, userID);
+            List<JournalEntry> userMetrics = DecryptRequestList(tableName, itemsToSelect, requirements);
+            return userMetrics;
+        }
+
         /// <summary>
         /// Decrypts values from List of List of strings and converts to appropriate type.
         /// </summary>

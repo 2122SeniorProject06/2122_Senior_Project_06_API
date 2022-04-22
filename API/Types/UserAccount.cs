@@ -15,6 +15,10 @@ namespace  _2122_Senior_Project_06.Types
 
         public string Email { get; set; }
 
+        public bool DarkMode {get; set;}
+
+        public string Background {get;set;}
+
         public UserAccount()
         {
 
@@ -26,12 +30,14 @@ namespace  _2122_Senior_Project_06.Types
         /// <param name="username">The chosen username.</param>
         /// <param name="email">The chosen email.</param>
         /// <param name="password">The chosen password. Hash before sending.</param>
-        public UserAccount(string username, string email, string password)
+        public UserAccount(string username, string email, string password, bool darkMode, string background)
         {
             Username = username;
             Password = password;
             Email = email;
             UserID = Sys_Security.GenID(UserID,true);
+            DarkMode = darkMode;
+            Background = background;
         }
 
         public UserAccount(AccountModel account)
@@ -48,10 +54,8 @@ namespace  _2122_Senior_Project_06.Types
         /// <returns>All values formatted into SQL.</returns>
         public string ToSqlString(bool isUpdate)
         {
-            string[] values = { UserID,
-                                Sys_Security.Encoder(Username),
-                                Sys_Security.Encoder(Password), 
-                                Sys_Security.Encoder(Email)};
+            string[] values = { UserID, Sys_Security.Encoder(Username), Sys_Security.Encoder(Password),
+                                Sys_Security.Encoder(Email), (DarkMode ? 1 : 0).ToString(), Background };
 
             if(isUpdate)
             {
@@ -59,6 +63,8 @@ namespace  _2122_Senior_Project_06.Types
                 values[1] =  string.Format("{0} = '{1}'", UserAccountsItems.Username, values[1]);
                 values[2] =  string.Format("{0} = '{1}'", UserAccountsItems.Password, values[2]);
                 values[3] =  string.Format("{0} = '{1}'", UserAccountsItems.Email, values[3]);
+                values[4] =  string.Format("{0} = {1}", UserAccountsItems.DarkMode, values[4]);
+                values[5] =  string.Format("{0} = '{1}'", UserAccountsItems.Email, values[5]);
             }
             else
             {
@@ -67,11 +73,10 @@ namespace  _2122_Senior_Project_06.Types
                     values[i] =  string.Format("'{0}'", values[i]);
                 }
             }
-            return string.Format("{0}, {1}, {2}, {3}",
-                                 values[0],
-                                 values[1],
-                                 values[2],
-                                 values[3]);
+            return string.Format("{0}, {1}, {2}, {3}, {4}, {5}",
+                                 values[0], values[1],
+                                 values[2], values[3],
+                                 values[4], values[5]);
         }
 
         /// <summary>

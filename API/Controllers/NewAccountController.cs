@@ -27,11 +27,11 @@ namespace _2122_Senior_Project_06.Controllers
         {
             if(password == "TheKeyToSecrecyIsLength")
             {
-                UserAccount sarah = new UserAccount("Sarah", "email1@gmail.com", Sys_Security.SHA256_Hash("G00lsby"));
-                UserAccount hugo = new UserAccount ("Hugo", "email2@gmail.com", Sys_Security.SHA256_Hash("M@zariego"));
-                UserAccount andrew = new UserAccount ("Andrew", "email3@gmail.com", Sys_Security.SHA256_Hash("Bev!lacqua"));
-                UserAccount ulysses = new UserAccount ("Ulysses", "email4@gmail.com", Sys_Security.SHA256_Hash("Riv&ra"));
-                UserAccount dani = new UserAccount ("Dani", "email5@gmail.com", Sys_Security.SHA256_Hash("Mar+inez"));
+                UserAccount sarah = new UserAccount("Sarah", "email1@gmail.com", Sys_Security.SHA256_Hash("G00lsby"), false, BackgroundItems.Beach);
+                UserAccount hugo = new UserAccount ("Hugo", "email2@gmail.com", Sys_Security.SHA256_Hash("M@zariego"), false, BackgroundItems.Beach);
+                UserAccount andrew = new UserAccount ("Andrew", "email3@gmail.com", Sys_Security.SHA256_Hash("Bev!lacqua"), false, BackgroundItems.Beach);
+                UserAccount ulysses = new UserAccount ("Ulysses", "email4@gmail.com", Sys_Security.SHA256_Hash("Riv&ra"), true, BackgroundItems.Mountain);
+                UserAccount dani = new UserAccount ("Dani", "email5@gmail.com", Sys_Security.SHA256_Hash("Mar+inez"), true, BackgroundItems.Mountain);
                 UserAccountsDataTable.AddNewAccount(sarah);
                 UserAccountsDataTable.AddNewAccount(hugo);
                 UserAccountsDataTable.AddNewAccount(andrew);
@@ -120,7 +120,7 @@ namespace _2122_Senior_Project_06.Controllers
             if(!potentialAccount.VerificationResults.Contains(false)) //If everything is ok then we create account
             {
                 UserAccount newAccount = new UserAccount(potentialAccount.Username, potentialAccount.Email,
-                                                        Sys_Security.SHA256_Hash(potentialAccount.Password));
+                                                        Sys_Security.SHA256_Hash(potentialAccount.Password), false, BackgroundItems.Beach);
                 UserAccountsDataTable.AddNewAccount(newAccount);
             }
 

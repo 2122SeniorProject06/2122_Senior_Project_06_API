@@ -64,9 +64,9 @@ namespace  _2122_Senior_Project_06.Types
             }
             else if(result.ItemArray.Length == 3)
             {
-                HadAttack = int.Parse((string)result[0]) == 1;
+                HadAttack = (bool)result[0];
                 Activity = VerifyActivity((string)result[1]);
-                WasEffective = int.Parse((string)result[2]) == 1;
+                WasEffective = (bool)result[2];
             }
         }
 

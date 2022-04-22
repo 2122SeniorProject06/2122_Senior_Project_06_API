@@ -30,6 +30,18 @@ namespace _2122_Senior_Project_06.Controllers
     [Route("[controller]")]
     public class AccountController : ControllerBase
     {
+        /// <summary>
+        /// Gets all the metrics and returns to the account page.
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns>A list of Journal Entries with only the metrics</returns>
+        /// <remarks>This is just a rough implementation for testing the database.
+        /// I'm likely going to create a new Model specifically for the metrics. </remarks>
+        [HttpGet("GetMetrics")]
+        public List<JournalEntry> GetMetrics(string userID)
+        {
+            return JournalsDataTable.GetMetricsWithUserId(userID);
+        }
 
         /// <summary>
         /// Returns a user's email, username, current badges given a userID

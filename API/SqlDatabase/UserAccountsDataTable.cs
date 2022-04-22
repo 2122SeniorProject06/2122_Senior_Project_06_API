@@ -126,7 +126,7 @@ namespace _2122_Senior_Project_06.SqlDatabase
             {
                 foreach(DataRow accountInfo in allAccountsFound.Rows)
                 {
-                    if(accountInfo.ItemArray.Length == 4)
+                    if(accountInfo.ItemArray.Length == 6)
                         desiredValues = ResultToAccount(accountInfo);
                     else
                     {
@@ -150,7 +150,9 @@ namespace _2122_Senior_Project_06.SqlDatabase
                 UserID = (string) results[0],
                 Username = (string) results[1],
                 Password = (string) results[2],
-                Email = (string) results[3]
+                Email = (string) results[3],
+                DarkMode = (bool) results[4],
+                Background = (string) results[5]
             };
             return account;
         }
