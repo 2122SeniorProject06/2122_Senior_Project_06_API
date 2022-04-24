@@ -22,21 +22,17 @@ namespace _2122_Senior_Project_06.Controllers
             return GenCountingVal(countingValue);
         }
 
-        private static int GenCountingVal(int str_val)
+        private static int GenCountingVal(int cnt_val)
         {
-            Random rnd = new Random();
-            
-            if (str_val <= 100)
-            {
-                int counting_val = rnd.Next(2, 15);
-                return counting_val;
-            }
-            else if(str_val > 100 && str_val <=200)
-            {
-                int counting_val = rnd.Next(15, 35);
-                return counting_val;
-            }
-            return 7;
+            var random = new Random();
+
+            var list = new List<int>{ 5,10,20,25};
+
+            int index = random.Next(list.Count);
+
+            int couting_val = (list[index]);
+
+            return couting_val;
 
         }
 
@@ -45,23 +41,19 @@ namespace _2122_Senior_Project_06.Controllers
         {
             return GenStartingVal(startingValue);
         }
+
          private static int GenStartingVal(int str_val)
         {
-            Random rnd = new Random();
-            
-            if (str_val <= 100)
-            {
-                int counting_val = rnd.Next(2, 15);
-                return counting_val;
-            }
-            else if(str_val > 100 && str_val <=200)
-            {
-                int counting_val = rnd.Next(15, 35);
-                return counting_val;
-            }
-            return 7;
+            var random = new Random();
 
-        }
-        
+            var list = new List<int>{ 50,100,200,500};
+
+            int index = random.Next(list.Count);
+
+            int starting_val = (list[index]);
+
+            return starting_val;
+
+        }   
     }
 }
