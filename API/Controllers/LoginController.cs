@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
 using System.Data;
 using _2122_Senior_Project_06.SqlDatabase;
+using _2122_Senior_Project_06.Types;
 
 namespace _2122_Senior_Project_06.Controllers
 {
@@ -33,14 +34,22 @@ namespace _2122_Senior_Project_06.Controllers
         /// <param name="loginModel">The provided login credentials.</param>
         /// <returns>The account userID, or -1 if login failed.</returns>
         [HttpPost("Authenticate")]
-        public string AuthenticateUser([FromBody]LoginPage loginModel){
+        public UserAccount AuthenticateUser([FromBody]LoginPage loginModel){
             string userID = null;
-
+            UserAccount curr_User = null;
+            loginModel.UserPrefrences = new List<string>();
             if(Sys_Security.VerifyPass(loginModel.Password, loginModel.Email))
             {
                 userID = UserAccountsDataTable.GetUIDFromEmail(loginModel.Email);
-            }  
-            return userID;
+                if(!string.IsNullOrEmpty(userID))
+                {
+                    curr_User = UserAccountsDataTable.GetAccount(userID);        
+                    curr_User.Password = null;
+                    curr_User.Email = null;
+                    curr_User.Username = null;
+                }
+            }
+            return curr_User;
         }
     }
 }

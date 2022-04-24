@@ -64,7 +64,7 @@ namespace  _2122_Senior_Project_06.Types
                 values[2] =  string.Format("{0} = '{1}'", UserAccountsItems.Password, values[2]);
                 values[3] =  string.Format("{0} = '{1}'", UserAccountsItems.Email, values[3]);
                 values[4] =  string.Format("{0} = {1}", UserAccountsItems.DarkMode, values[4]);
-                values[5] =  string.Format("{0} = '{1}'", UserAccountsItems.Email, values[5]);
+                values[5] =  string.Format("{0} = '{1}'", UserAccountsItems.Background, values[5]);
             }
             else
             {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -14,6 +15,6 @@ namespace  _2122_Senior_Project_06.Models
 
         public string Password{ get; set; }
 
-        public string UserPrefrences{ get; set; }
+        public List<string> UserPrefrences{ get; set; }
     }
 }

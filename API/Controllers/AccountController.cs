@@ -76,43 +76,71 @@ namespace _2122_Senior_Project_06.Controllers
         /// <param name="UserAccount">UserAccount is obtained dependent on what the user would like to update</param>
         /// <returns>IActionResult, Ok() if successful, Forbid() if invalid/user DNE</returns>
         [HttpPut("UpdateUser")]
-        public IActionResult UpdateUser([FromBody]AccountModel updatedUser) //might need to send UID seperate
+        public IActionResult UpdateUser([FromBody]AccountModel potentialUpdate) //might need to send UID seperate
         {
-            if(Sys_Security.VerifySQL(updatedUser.userID))
+            if(Sys_Security.VerifySQL(potentialUpdate.userID))
             {
-                if(UserAccountsDataTable.UIDInUse(updatedUser.userID))
+                /*
+                    Bool Key:
+                    [0]: password
+                    [1]: email
+                    [2]: username
+                */
+                potentialUpdate.VerificationErrors = new string[2];
+                potentialUpdate.VerificationResults = new bool[3];
+                if(UserAccountsDataTable.UIDInUse(potentialUpdate.userID))
                 {
-                    // if(updatedUser.Username != null)
-                    // {
-                    //     try
-                    //     {
-                    //         if()
-                    //     }
-                    // }
-                        if(updatedUser.new_Password != null)
+                    if(potentialUpdate.new_Password != null)
+                    {
+                        try
                         {
-
+                            potentialUpdate.VerificationResults[0] = Sys_Security.VerifyNewPass(potentialUpdate.new_Password);
                         }
-                        if(updatedUser.new_Email != null)
+                        catch(IssueWithCredentialException e)
                         {
-                            try
-                            {
-                                if(Sys_Security.VerifyEmail(updatedUser.new_Email))//if email is an email and if email is not already in use
-                                {
-                                    if(!UserAccountsDataTable.EmailInUse(updatedUser.new_Email))
-                                        updatedUser.VerificationResults[0] = true;
-
-                                    else throw new IssueWithCredentialException("Email already in use.");
-                                }
-                            }
-                            catch
-                            {
-
-                            }
+                            potentialUpdate.VerificationResults[0] = false;
+                            potentialUpdate.VerificationErrors[0] = e.Message;
                         }
-                        
-                    UserAccountsDataTable.UpdateUserAccount(new UserAccount(updatedUser));
-                    return Ok();
+                    }
+                    else potentialUpdate.VerificationResults[0] = true;
+
+                    if(potentialUpdate.new_Email != null)
+                    {
+                        try
+                        {
+                            if(Sys_Security.VerifyEmail(potentialUpdate.new_Email))//if email is an email and if email is not already in use
+                            {
+                                if(!UserAccountsDataTable.EmailInUse(potentialUpdate.new_Email))
+                                    potentialUpdate.VerificationResults[1] = true;
+
+                                else throw new IssueWithCredentialException("Email already in use.");
+                            }
+                            else throw new IssueWithCredentialException("Email is not valid.");
+                        }
+                        catch(IssueWithCredentialException e)
+                        {
+                            potentialUpdate.VerificationResults[1] = false;
+                            potentialUpdate.VerificationErrors[1] = e.Message;
+                        }
+                    }
+                    else potentialUpdate.VerificationResults[1] = true;
+
+                    if(potentialUpdate.new_Username != null)
+                    {
+                        potentialUpdate.VerificationResults[2] = true;
+                    }
+                    else potentialUpdate.VerificationResults[2] = true;
+
+                    if(!potentialUpdate.VerificationResults.Contains(false))
+                    {
+                        UserAccount updatedUser = new UserAccount(potentialUpdate.new_Username, potentialUpdate.new_Email,
+                                                        Sys_Security.SHA256_Hash(potentialUpdate.new_Password), false, BackgroundItems.Beach);
+                        updatedUser.UserID = potentialUpdate.userID;
+                        UserAccountsDataTable.UpdateUserAccount(updatedUser);
+                    } 
+
+                    
+                    return Ok(potentialUpdate);
                 }
                 else
                 {
