@@ -99,8 +99,7 @@ namespace _2122_Senior_Project_06.Controllers
             {
                 potentialJournal.LastUpdated = DateTime.Now;
                 JournalEntry newEntry = new JournalEntry(potentialJournal.Title, potentialJournal.Body, potentialJournal.UserID, 
-                                                         potentialJournal.LastUpdated, potentialJournal.HadAttack,
-                                                         potentialJournal.Activity, potentialJournal.WasEffective);
+                                                         potentialJournal.LastUpdated, potentialJournal.ActivityMetric);
                 JournalsDataTable.AddNewEntry(newEntry);
                 return Ok();
             }

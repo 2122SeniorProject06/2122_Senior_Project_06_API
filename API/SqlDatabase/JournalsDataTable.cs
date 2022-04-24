@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _2122_Senior_Project_06.Models;
 using _2122_Senior_Project_06.Exceptions;
 using _2122_Senior_Project_06.Types;
+using System.Linq;
 
 namespace _2122_Senior_Project_06.SqlDatabase
 {
@@ -22,7 +23,7 @@ namespace _2122_Senior_Project_06.SqlDatabase
         public static List<JournalEntry> GetAllJournals(string userID)
         {
             string requirements = string.Format("{0} = '{1}'", JournalsItems.UserID, userID);
-            List<JournalEntry> results = DecryptRequestList(tableName, null, requirements);
+            List<JournalEntry> results = DecryptRequestList(tableName, null, requirements).Select(i => (JournalEntry)i).ToList();
             return results;
         }
 
@@ -34,7 +35,7 @@ namespace _2122_Senior_Project_06.SqlDatabase
         public static JournalEntry GetJournalEntry(string journalID)
         {
             string requirements = string.Format("{0} = '{1}'", JournalsItems.JournalID, journalID);
-            List<JournalEntry> results = DecryptRequestList(tableName, null, requirements);
+            List<JournalEntry> results = DecryptRequestList(tableName, null, requirements).Select(i => (JournalEntry)i).ToList();
             return results[0];
         }
 
@@ -78,15 +79,16 @@ namespace _2122_Senior_Project_06.SqlDatabase
         public static bool JournalIDInUse(string journalID)
         {
             string requirements = string.Format("{0} = '{1}'", JournalsItems.JournalID, journalID);
-            List<JournalEntry> associatedAccounts = DecryptRequestList(tableName, null, requirements);
+            List<object> associatedAccounts = DecryptRequestList(tableName, null, requirements);
             return associatedAccounts.Count != 0;
         }
 
-        public static List<JournalEntry> GetMetricsWithUserId(string userID)
+        public static List<Metrics> GetMetricsWithUserId(string userID)
         {
-            string itemsToSelect = string.Format("{0}, {1}, {2}", JournalsItems.HadAttack, JournalsItems.Activity, JournalsItems.WasEffective);
+            string itemsToSelect = string.Format("{0}, {1}, {2}", MetricsItems.HadAttack, MetricsItems.Activity, MetricsItems.WasEffective);
             string requirements = string.Format("{0} = '{1}'", JournalsItems.UserID, userID);
-            List<JournalEntry> userMetrics = DecryptRequestList(tableName, itemsToSelect, requirements);
+            List<object> dataTableResults = DecryptRequestList(tableName, itemsToSelect, requirements);
+            List<Metrics> userMetrics = dataTableResults.Select(i => (Metrics)i).ToList();
             return userMetrics;
         }
 
@@ -97,17 +99,27 @@ namespace _2122_Senior_Project_06.SqlDatabase
         /// <param name="itemsToSelect">The item(s) to select.</param>
         /// <param name="requirements">The required entries to select from.</param>
         /// <returns></returns>
-        private static List<JournalEntry> DecryptRequestList(string tableName, string itemsToSelect = null, string requirements = null)
+        private static List<object> DecryptRequestList(string tableName, string itemsToSelect = null, string requirements = null)
         {
-            List<JournalEntry> desiredValues = null;
+            List<object> desiredValues = null;
 
             DataTable allEntriesFound = DatabaseAccess.Select(tableName,itemsToSelect, requirements);
             if(allEntriesFound != null)
             {
-                desiredValues = new List<JournalEntry>();
+                desiredValues = new List<object>();
                 foreach(DataRow entryInfo in allEntriesFound.Rows)
                 {
-                    JournalEntry result = new JournalEntry(entryInfo); 
+                    object result = null;
+
+                    if(entryInfo.ItemArray.Length == 8)
+                    {
+                        result = new JournalEntry(entryInfo); 
+                    }
+                    else if(entryInfo.ItemArray.Length == 3)
+                    {
+                        result = new Metrics(entryInfo);
+                    }
+
                     desiredValues.Add(result);
                 }
             }

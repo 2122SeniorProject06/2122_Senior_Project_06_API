@@ -38,7 +38,7 @@ namespace _2122_Senior_Project_06.Controllers
         /// <remarks>This is just a rough implementation for testing the database.
         /// I'm likely going to create a new Model specifically for the metrics. </remarks>
         [HttpGet("GetMetrics")]
-        public List<JournalEntry> GetMetrics(string userID)
+        public List<Metrics> GetMetrics(string userID)
         {
             return JournalsDataTable.GetMetricsWithUserId(userID);
         }
