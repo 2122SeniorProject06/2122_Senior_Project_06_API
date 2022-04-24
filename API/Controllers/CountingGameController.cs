@@ -19,14 +19,14 @@ namespace _2122_Senior_Project_06.Controllers
         [HttpGet("GetCountVal")]
         public int GenerateCountValue(int countingValue)
         {
-            return GenCountingVal(countingValue);
+            return GenCountingVal();
         }
 
-        private static int GenCountingVal(int cnt_val)
+        private static int GenCountingVal()
         {
             var random = new Random();
 
-            var list = new List<int>{ 5,10,20,25};
+            var list = new List<int>{ 3,5,15,20,30};
 
             int index = random.Next(list.Count);
 
@@ -35,25 +35,5 @@ namespace _2122_Senior_Project_06.Controllers
             return couting_val;
 
         }
-
-        [HttpGet("GetStartVal")]
-        public int GenerateStartValue(int startingValue)
-        {
-            return GenStartingVal(startingValue);
-        }
-
-         private static int GenStartingVal(int str_val)
-        {
-            var random = new Random();
-
-            var list = new List<int>{ 50,100,200,500};
-
-            int index = random.Next(list.Count);
-
-            int starting_val = (list[index]);
-
-            return starting_val;
-
-        }   
-    }
+    }   
 }
