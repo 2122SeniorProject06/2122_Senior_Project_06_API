@@ -148,11 +148,11 @@ namespace _2122_Senior_Project_06.SqlDatabase
             UserAccount account = new UserAccount()
             {
                 UserID = (string) results[0],
-                Username = (string) results[1],
-                Password = (string) results[2],
-                Email = (string) results[3],
+                Username = Sys_Security.Decoder((string)results[1]),
+                Password = Sys_Security.Decoder((string)results[2]),
+                Email = Sys_Security.Decoder((string)results[3]),
                 DarkMode = (bool) results[4],
-                Background = (string) results[5]
+                Background = Sys_Security.Decoder((string)results[5])
             };
             return account;
         }

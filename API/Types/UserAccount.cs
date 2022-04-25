@@ -55,7 +55,7 @@ namespace  _2122_Senior_Project_06.Types
         public string ToSqlString(bool isUpdate)
         {
             string[] values = { UserID, Sys_Security.Encoder(Username), Sys_Security.Encoder(Password),
-                                Sys_Security.Encoder(Email), (DarkMode ? 1 : 0).ToString(), Background };
+                                Sys_Security.Encoder(Email), (DarkMode ? 1 : 0).ToString(), Sys_Security.Encoder(Background) };
 
             if(isUpdate)
             {

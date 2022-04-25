@@ -55,8 +55,9 @@ namespace _2122_Senior_Project_06.Controllers
             {
                 if(UserAccountsDataTable.UIDInUse(userID))
                 {
-                    
-                    return UserAccountsDataTable.GetAccount(userID);
+                    UserAccount returnValue = UserAccountsDataTable.GetAccount(userID);
+                    returnValue.Password = null;
+                    return returnValue;
                 }
                 else
                 {
@@ -86,10 +87,11 @@ namespace _2122_Senior_Project_06.Controllers
                     [1]: email
                     [2]: username
                 */
-                potentialUpdate.VerificationErrors = new string[2];
+                potentialUpdate.VerificationErrors = new string[3];
                 potentialUpdate.VerificationResults = new bool[3];
                 if(UserAccountsDataTable.UIDInUse(potentialUpdate.userID))
                 {
+                    UserAccount currInfo = UserAccountsDataTable.GetAccount(potentialUpdate.userID);
                     if(potentialUpdate.new_Password != null)
                     {
                         try
@@ -135,11 +137,15 @@ namespace _2122_Senior_Project_06.Controllers
                     {
                         UserAccount updatedUser = new UserAccount(potentialUpdate.new_Username, potentialUpdate.new_Email,
                                                         Sys_Security.SHA256_Hash(potentialUpdate.new_Password), false, BackgroundItems.Beach);
-                        updatedUser.UserID = potentialUpdate.userID;
-                        UserAccountsDataTable.UpdateUserAccount(updatedUser);
+                        currInfo.UpdateInfo(updatedUser);
+                        UserAccountsDataTable.UpdateUserAccount(currInfo);
                     } 
 
-                    
+                    potentialUpdate.confirmedPassword = null;
+                    potentialUpdate.new_Email = null;
+                    potentialUpdate.new_Password = null;
+                    potentialUpdate.userID = null;
+                    potentialUpdate.new_Username = null;
                     return Ok(potentialUpdate);
                 }
                 else
