@@ -79,7 +79,7 @@ namespace _2122_Senior_Project_06.Controllers
         /// <returns>IActionResult, Ok() if successful, Forbid() if SQLinjection/user DNE. 
         ///     If successful but user inputted invalid information then error is displayed to user</returns>
         [HttpPut("UpdateUser")]
-        public IActionResult UpdateUser([FromBody]AccountModel potentialUpdate) //might need to send UID seperate
+        public AccountModel UpdateUser([FromBody]AccountModel potentialUpdate) //might need to send UID seperate
         {
             if(Sys_Security.VerifySQL(potentialUpdate.userID))
             {
@@ -90,8 +90,8 @@ namespace _2122_Senior_Project_06.Controllers
                     [2]: email
                     [3]: username
                 */
-                potentialUpdate.VerificationErrors = new string[3];
-                potentialUpdate.VerificationResults = new bool[3];
+                potentialUpdate.VerificationErrors = new string[4];
+                potentialUpdate.VerificationResults = new bool[4];
                 if(UserAccountsDataTable.UIDInUse(potentialUpdate.userID))
                 {
                     UserAccount currInfo = UserAccountsDataTable.GetAccount(potentialUpdate.userID);
@@ -167,16 +167,16 @@ namespace _2122_Senior_Project_06.Controllers
                     potentialUpdate.new_Password = null;
                     potentialUpdate.userID = null;
                     potentialUpdate.new_Username = null;
-                    return Ok(potentialUpdate);
+                    return potentialUpdate;
                 }
                 else
                 {
-                    return Forbid();
+                    return null;
                 }
             }
             else
             {
-                return Forbid();
+                return null;
             }
             /*
                 Should we verify password first?
