@@ -95,7 +95,7 @@ namespace _2122_Senior_Project_06.Controllers
                 if(UserAccountsDataTable.UIDInUse(potentialUpdate.userID))
                 {
                     UserAccount currInfo = UserAccountsDataTable.GetAccount(potentialUpdate.userID);
-                    if(potentialUpdate.new_Password != null)
+                    if(!String.IsNullOrEmpty(potentialUpdate.new_Password))
                     {
                         try
                         {
@@ -127,7 +127,7 @@ namespace _2122_Senior_Project_06.Controllers
                         potentialUpdate.VerificationResults[1] = true;
                     }
 
-                    if(potentialUpdate.new_Email != null)
+                    if(!String.IsNullOrEmpty(potentialUpdate.new_Email))
                     {
                         try
                         {
@@ -148,7 +148,7 @@ namespace _2122_Senior_Project_06.Controllers
                     }
                     else potentialUpdate.VerificationResults[2] = true;
 
-                    if(potentialUpdate.new_Username != null)
+                    if(!String.IsNullOrEmpty(potentialUpdate.new_Username))
                     {
                         potentialUpdate.VerificationResults[3] = true;
                     }

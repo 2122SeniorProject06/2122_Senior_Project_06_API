@@ -85,9 +85,11 @@ namespace  _2122_Senior_Project_06.Types
         /// <param name="newInfo">The updated information.</param>
         public void UpdateInfo(UserAccount newInfo)
         {
-            Username = newInfo.Username ?? Username;
-            Password = newInfo.Password ?? Password;
-            Email = newInfo.Email ?? Email;
+            Username = !string.IsNullOrEmpty(newInfo.Username) ? newInfo.Username : Username;
+            Password = !string.IsNullOrEmpty(newInfo.Password) ? newInfo.Password : Password;
+            Email = !string.IsNullOrEmpty(newInfo.Email) ? newInfo.Email : Email;
+            Background = !string.IsNullOrEmpty(newInfo.Background) ? newInfo.Background : Background;
+            DarkMode = newInfo.DarkMode != DarkMode ? newInfo.DarkMode : DarkMode;
         }
     }    
 }
