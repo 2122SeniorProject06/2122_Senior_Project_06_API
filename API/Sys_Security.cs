@@ -203,9 +203,13 @@ namespace _2122_Senior_Project_06
         /// <returns>The hashed value.</returns>
         public static string SHA256_Hash(string args) //Can turn to private
         {
-            SHA256Managed _sha256 = new SHA256Managed();
-            byte[] _cipherText = _sha256.ComputeHash(Encoding.Default.GetBytes(args));
-            return Convert.ToBase64String(_cipherText);
+            if(!String.IsNullOrEmpty(args))
+            {
+                SHA256Managed _sha256 = new SHA256Managed();
+                byte[] _cipherText = _sha256.ComputeHash(Encoding.Default.GetBytes(args));
+                return Convert.ToBase64String(_cipherText);
+            }
+            else return null;
         }
     
         public static string GenID(string ID, bool type)
@@ -265,6 +269,5 @@ namespace _2122_Senior_Project_06
                 throw new IssueWithCredentialException("Not a valid email.");
             }
         }
-        
     }
 }

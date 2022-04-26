@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Cors;
 using System.Data;
 using _2122_Senior_Project_06.Types;
 using _2122_Senior_Project_06.SqlDatabase;
+using _2122_Senior_Project_06.Exceptions;
 
 namespace _2122_Senior_Project_06.Controllers
 {
@@ -30,6 +31,20 @@ namespace _2122_Senior_Project_06.Controllers
     public class AccountController : ControllerBase
     {
         /// <summary>
+        /// Gets all the metrics and returns to the account page.
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns>A list of Journal Entries with only the metrics</returns>
+        /// <remarks> This function can most likely be scrapped since all user metrics is handled with the metricsController
+        ///             This function may cause errors when used in frontend.
+        ///</remarks>
+        [HttpGet("GetMetrics")]
+        public List<Metrics> GetMetrics(string userID)
+        {
+            return JournalsDataTable.GetMetricsWithUserId(userID);
+        }
+
+        /// <summary>
         /// Returns a user's email, username, current badges given a userID
         /// </summary>
         /// <param name="userID">UserID obtained through login</param>
@@ -41,8 +56,9 @@ namespace _2122_Senior_Project_06.Controllers
             {
                 if(UserAccountsDataTable.UIDInUse(userID))
                 {
-                    
-                    return UserAccountsDataTable.GetAccount(userID);
+                    UserAccount returnValue = UserAccountsDataTable.GetAccount(userID);
+                    returnValue.Password = null;
+                    return returnValue;
                 }
                 else
                 {
@@ -57,27 +73,110 @@ namespace _2122_Senior_Project_06.Controllers
 
         /// <summary>
         /// Updates users info no matter type of data
+        /// User can update Email, Username or Password
         /// </summary>
         /// <param name="UserAccount">UserAccount is obtained dependent on what the user would like to update</param>
-        /// <returns>IActionResult, Ok() if successful, Forbid() if invalid/user DNE</returns>
+        /// <returns>IActionResult, Ok() if successful, Forbid() if SQLinjection/user DNE. 
+        ///     If successful but user inputted invalid information then error is displayed to user</returns>
         [HttpPut("UpdateUser")]
-        public IActionResult UpdateUser([FromBody]UserAccount updatedUser) //might need to send UID seperate
+        public AccountModel UpdateUser([FromBody]AccountModel potentialUpdate) //might need to send UID seperate
         {
-            if(Sys_Security.VerifySQL(updatedUser.UserID))
+            if(Sys_Security.VerifySQL(potentialUpdate.userID))
             {
-                if(UserAccountsDataTable.UIDInUse(updatedUser.UserID))
+                /*
+                    Bool Key:
+                    [0]: password
+                    [1]: confirmPassword
+                    [2]: email
+                    [3]: username
+                */
+                potentialUpdate.VerificationErrors = new string[4];
+                potentialUpdate.VerificationResults = new bool[4];
+                if(UserAccountsDataTable.UIDInUse(potentialUpdate.userID))
                 {
-                    UserAccountsDataTable.UpdateUserAccount(updatedUser);
-                    return Ok();
+                    UserAccount currInfo = UserAccountsDataTable.GetAccount(potentialUpdate.userID);
+                    if(!String.IsNullOrEmpty(potentialUpdate.new_Password))
+                    {
+                        try
+                        {
+                            if(potentialUpdate.new_Password == potentialUpdate.confirmedPassword)
+                            {
+                                try
+                                {
+                                    potentialUpdate.VerificationResults[0] = Sys_Security.VerifyNewPass(potentialUpdate.new_Password);
+                                    potentialUpdate.VerificationResults[1] = true;
+                                }
+                                catch(IssueWithCredentialException e)
+                                {
+                                    potentialUpdate.VerificationResults[0] = false;
+                                    potentialUpdate.VerificationErrors[0] = e.Message;
+                                }
+                            }
+                            else throw new IssueWithCredentialException("Passowrds do not match.");
+                        }
+                        catch(IssueWithCredentialException e)
+                        {
+                            potentialUpdate.VerificationResults[1] = false;
+                            potentialUpdate.VerificationErrors[1] = e.Message;
+                        }
+                        
+                    }
+                    else 
+                    {
+                        potentialUpdate.VerificationResults[0] = true;
+                        potentialUpdate.VerificationResults[1] = true;
+                    }
+
+                    if(!String.IsNullOrEmpty(potentialUpdate.new_Email))
+                    {
+                        try
+                        {
+                            if(Sys_Security.VerifyEmail(potentialUpdate.new_Email))//if email is an email and if email is not already in use
+                            {
+                                if(!UserAccountsDataTable.EmailInUse(potentialUpdate.new_Email))
+                                    potentialUpdate.VerificationResults[2] = true;
+
+                                else throw new IssueWithCredentialException("Email already in use.");
+                            }
+                            else throw new IssueWithCredentialException("Email is not valid.");
+                        }
+                        catch(IssueWithCredentialException e)
+                        {
+                            potentialUpdate.VerificationResults[2] = false;
+                            potentialUpdate.VerificationErrors[2] = e.Message;
+                        }
+                    }
+                    else potentialUpdate.VerificationResults[2] = true;
+
+                    if(!String.IsNullOrEmpty(potentialUpdate.new_Username))
+                    {
+                        potentialUpdate.VerificationResults[3] = true;
+                    }
+                    else potentialUpdate.VerificationResults[3] = true;
+
+                    if(!potentialUpdate.VerificationResults.Contains(false))
+                    {
+                        UserAccount updatedUser = new UserAccount(potentialUpdate.new_Username, potentialUpdate.new_Email,
+                                                        Sys_Security.SHA256_Hash(potentialUpdate.new_Password), potentialUpdate.DarkMode, potentialUpdate.Background);
+                        currInfo.UpdateInfo(updatedUser);
+                        UserAccountsDataTable.UpdateUserAccount(currInfo);
+                    } 
+
+                    potentialUpdate.confirmedPassword = null;
+                    potentialUpdate.new_Email = null;
+                    potentialUpdate.new_Password = null;
+                    potentialUpdate.userID = null;
+                    potentialUpdate.new_Username = null;
+                    return potentialUpdate;
                 }
                 else
                 {
-                    return Forbid();
+                    return null;
                 }
             }
             else
             {
-                return Forbid();
+                return null;
             }
             /*
                 Should we verify password first?

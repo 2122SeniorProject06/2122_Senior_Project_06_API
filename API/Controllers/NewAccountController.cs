@@ -22,6 +22,29 @@ namespace _2122_Senior_Project_06.Controllers
     [Route("[controller]")]
     public class NewAccountController : ControllerBase
     {
+        [HttpPost("SuperSecretBaseValueGeneration")]
+        public string GenerateUsers(string password)
+        {
+            if(password == "TheKeyToSecrecyIsLength")
+            {
+                UserAccount sarah = new UserAccount("Sarah", "email1@gmail.com", Sys_Security.SHA256_Hash("G00lsby"), false, BackgroundItems.Beach);
+                UserAccount hugo = new UserAccount ("Hugo", "email2@gmail.com", Sys_Security.SHA256_Hash("M@zariego"), false, BackgroundItems.Beach);
+                UserAccount andrew = new UserAccount ("Andrew", "email3@gmail.com", Sys_Security.SHA256_Hash("Bev!lacqua"), false, BackgroundItems.Beach);
+                UserAccount ulysses = new UserAccount ("Ulysses", "email4@gmail.com", Sys_Security.SHA256_Hash("Riv&ra"), true, BackgroundItems.Mountain);
+                UserAccount dani = new UserAccount ("Dani", "email5@gmail.com", Sys_Security.SHA256_Hash("Mar+inez"), true, BackgroundItems.Mountain);
+                UserAccountsDataTable.AddNewAccount(sarah);
+                UserAccountsDataTable.AddNewAccount(hugo);
+                UserAccountsDataTable.AddNewAccount(andrew);
+                UserAccountsDataTable.AddNewAccount(ulysses);
+                UserAccountsDataTable.AddNewAccount(dani);
+                return "MissionComplete";
+            }
+
+            else if(password == "SuperSecretBaseValueGenerationPassword")
+                return "You are so stupid. Did you really think that we would just give you the password?";
+
+            else return "Incorrect Password. The correct password is \"SuperSecretBaseValueGenerationPassword\".";
+        }
         /*
          * The following controller processes a new account being created
          *  @ CreateNewUser
@@ -94,12 +117,12 @@ namespace _2122_Senior_Project_06.Controllers
                         - One lower case letter
                         - One number
             */
-            // if(!isValid) //If everything is ok then we create account
-            // {
-            //     UserAccount newAccount = new UserAccount(potentialAccount.Username, potentialAccount.Email,
-            //                                             Sys_Security.SHA256_Hash(potentialAccount.Password));
-            //     UserAccountsDataTable.AddNewAccount(newAccount);
-            // }
+            if(!potentialAccount.VerificationResults.Contains(false)) //If everything is ok then we create account
+            {
+                UserAccount newAccount = new UserAccount(potentialAccount.Username, potentialAccount.Email,
+                                                        Sys_Security.SHA256_Hash(potentialAccount.Password));
+                UserAccountsDataTable.AddNewAccount(newAccount);
+            }
 
             potentialAccount.confirmedPassword = null;
             potentialAccount.Email = null;

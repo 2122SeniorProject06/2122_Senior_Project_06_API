@@ -1,3 +1,4 @@
+using _2122_Senior_Project_06.Models;
 namespace  _2122_Senior_Project_06.Types
 {
     /// <summary>
@@ -14,6 +15,10 @@ namespace  _2122_Senior_Project_06.Types
 
         public string Email { get; set; }
 
+        public bool DarkMode {get; set;}
+
+        public string Background {get;set;}
+
         public UserAccount()
         {
 
@@ -25,12 +30,22 @@ namespace  _2122_Senior_Project_06.Types
         /// <param name="username">The chosen username.</param>
         /// <param name="email">The chosen email.</param>
         /// <param name="password">The chosen password. Hash before sending.</param>
-        public UserAccount(string username, string email, string password)
+        public UserAccount(string username, string email, string password, bool darkMode = false, string background = null)
         {
             Username = username;
             Password = password;
             Email = email;
             UserID = Sys_Security.GenID(UserID,true);
+            DarkMode = darkMode;
+            Background = background ?? BackgroundItems.Mountain;
+        }
+
+        public UserAccount(AccountModel account)
+        {
+            Username = account.new_Username;
+            Password = account.new_Password;
+            Email = account.new_Email;
+            UserID = account.userID;
         }
 
         /// <summary>
@@ -39,10 +54,8 @@ namespace  _2122_Senior_Project_06.Types
         /// <returns>All values formatted into SQL.</returns>
         public string ToSqlString(bool isUpdate)
         {
-            string[] values = { UserID,
-                                Sys_Security.Encoder(Username),
-                                Sys_Security.Encoder(Password), 
-                                Sys_Security.Encoder(Email)};
+            string[] values = { UserID, Sys_Security.Encoder(Username), Sys_Security.Encoder(Password),
+                                Sys_Security.Encoder(Email), (DarkMode ? 1 : 0).ToString(), Sys_Security.Encoder(Background) };
 
             if(isUpdate)
             {
@@ -50,6 +63,8 @@ namespace  _2122_Senior_Project_06.Types
                 values[1] =  string.Format("{0} = '{1}'", UserAccountsItems.Username, values[1]);
                 values[2] =  string.Format("{0} = '{1}'", UserAccountsItems.Password, values[2]);
                 values[3] =  string.Format("{0} = '{1}'", UserAccountsItems.Email, values[3]);
+                values[4] =  string.Format("{0} = {1}", UserAccountsItems.DarkMode, values[4]);
+                values[5] =  string.Format("{0} = '{1}'", UserAccountsItems.Background, values[5]);
             }
             else
             {
@@ -58,11 +73,10 @@ namespace  _2122_Senior_Project_06.Types
                     values[i] =  string.Format("'{0}'", values[i]);
                 }
             }
-            return string.Format("{0}, {1}, {2}, {3}",
-                                 values[0],
-                                 values[1],
-                                 values[2],
-                                 values[3]);
+            return string.Format("{0}, {1}, {2}, {3}, {4}, {5}",
+                                 values[0], values[1],
+                                 values[2], values[3],
+                                 values[4], values[5]);
         }
 
         /// <summary>
@@ -71,9 +85,11 @@ namespace  _2122_Senior_Project_06.Types
         /// <param name="newInfo">The updated information.</param>
         public void UpdateInfo(UserAccount newInfo)
         {
-            Username = newInfo.Username ?? Username;
-            Password = newInfo.Password ?? Password;
-            Email = newInfo.Email ?? Email;
+            Username = !string.IsNullOrEmpty(newInfo.Username) ? newInfo.Username : Username;
+            Password = !string.IsNullOrEmpty(newInfo.Password) ? newInfo.Password : Password;
+            Email = !string.IsNullOrEmpty(newInfo.Email) ? newInfo.Email : Email;
+            Background = !string.IsNullOrEmpty(newInfo.Background) ? newInfo.Background : Background;
+            DarkMode = newInfo.DarkMode != DarkMode ? newInfo.DarkMode : DarkMode;
         }
     }    
 }

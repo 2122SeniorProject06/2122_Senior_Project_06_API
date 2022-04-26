@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Collections.Generic;
 namespace  _2122_Senior_Project_06.Types
 {
     /// <summary>
@@ -8,17 +9,14 @@ namespace  _2122_Senior_Project_06.Types
     /// <remarks> Paired programmed by Hugo, Andrew, and Sarah. </remarks>
     public class JournalEntry 
     {
-        public string JournalID {get; set;}
-        public string Title {get; set;}
-        public string Body {get; set;}
-        public string UserID {get; set;}
-        public DateTime LastUpdated {get; set;}
-
+        #region Constructors
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public JournalEntry ()
         {
             
         }
-
 
         /// <summary>
         /// Parameterized constructor for JournalEntry that was just created.
@@ -28,13 +26,34 @@ namespace  _2122_Senior_Project_06.Types
         /// <param name="userID">The userID of the entry creator.</param>
         /// <param name="lastUpdated">The time the journal was last update.
         /// Reccomended to send DateTime.Now.</param>
-        public JournalEntry(string title, string body, string userID, DateTime lastUpdated)
+        public JournalEntry(string title, string body, string userID, DateTime lastUpdated,
+                            bool hadAttack, string activity, bool wasEffective)
         {
             JournalID = Sys_Security.GenID(JournalID, false);
             Title = title;
             Body = body;
             UserID = userID;
             LastUpdated = lastUpdated;
+            ActivityMetric = new Metrics(hadAttack, activity, wasEffective);
+        }
+
+        /// <summary>
+        /// Parameterized constructor for JournalEntry that was just created.
+        /// </summary>
+        /// <param name="title">The title of the entry.</param>
+        /// <param name="body">The body of the entry.</param>
+        /// <param name="userID">The userID of the entry creator.</param>
+        /// <param name="lastUpdated">The time the journal was last update.
+        /// Reccomended to send DateTime.Now.</param>
+        /// <param name="activityMetrics">The user's metrics.</param>
+        public JournalEntry(string title, string body, string userID, DateTime lastUpdated, Metrics activityMetrics)
+        {
+            JournalID = Sys_Security.GenID(JournalID, false);
+            Title = title;
+            Body = body;
+            UserID = userID;
+            LastUpdated = lastUpdated;
+            ActivityMetric = activityMetrics;
         }
 
         /// <summary>
@@ -48,8 +67,44 @@ namespace  _2122_Senior_Project_06.Types
             Body = Sys_Security.Decoder((string)result[2]);
             UserID = (string)result[3];
             LastUpdated = (DateTime) result[4];
+            ActivityMetric = new Metrics((bool)result[5], (string)result[6], (bool)result[7]);
         }
+        #endregion
 
+        #region Properties
+        /// <summary>
+        /// Gets and sets the Journal ID.
+        /// </summary>
+        public string JournalID {get; set;}
+
+        /// <summary>
+        /// Gets and sets the journal's title.
+        /// </summary>
+        public string Title {get; set;}
+
+        /// <summary>
+        /// Gets and sets the journal's body.
+        /// </summary>
+        public string Body {get; set;}
+
+        /// <summary>
+        /// Gets and sets the journal creator's ID.
+        /// </summary>
+        public string UserID {get; set;}
+
+        /// <summary>
+        /// Gets and sets the last time the journal was updated.
+        /// </summary>
+        public DateTime LastUpdated {get; set;}
+
+        /// <summary>
+        /// Gets and sets the journal's activity metrics.
+        /// </summary>
+        /// <value></value>
+        public Metrics ActivityMetric {get; set;}
+        #endregion
+
+        #region Methods
         /// <summary>
         /// Returns values in a SQL value format.
         /// </summary>
@@ -59,10 +114,10 @@ namespace  _2122_Senior_Project_06.Types
         {
             string formattedLastUpdated = LastUpdated.ToString("yyyy-MM-dd HH:MM:ss");
             string[] values = { JournalID,
-                                 Sys_Security.Encoder(Title),
-                                 Sys_Security.Encoder(Body),
-                                 UserID,
-                                 formattedLastUpdated };
+                                Sys_Security.Encoder(Title),
+                                Sys_Security.Encoder(Body),
+                                UserID,
+                                formattedLastUpdated };
 
             if(isUpdate)
             {
@@ -76,16 +131,17 @@ namespace  _2122_Senior_Project_06.Types
             {
                 for(int i = 0; i < values.Length; i++)
                 {
-                    values[i] =  string.Format("'{0}'", values[i]);
+                    values[i] = string.Format("'{0}'", values[i]);
                 }
             }
             
-            return string.Format("{0}, {1}, {2}, {3}, {4}",
+            return string.Format("{0}, {1}, {2}, {3}, {4}, {5}",
                                  values[0],
                                  values[1],
                                  values[2],
                                  values[3],
-                                 values[4]);
+                                 values[4],
+                                 ActivityMetric.ToSqlString(isUpdate));
         }
 
         /// <summary>
@@ -98,5 +154,6 @@ namespace  _2122_Senior_Project_06.Types
             Body = newInfo.Body ?? Body;
             LastUpdated = newInfo.LastUpdated;
         }
+        #endregion
     }
 }
