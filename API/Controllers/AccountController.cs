@@ -35,8 +35,9 @@ namespace _2122_Senior_Project_06.Controllers
         /// </summary>
         /// <param name="userID"></param>
         /// <returns>A list of Journal Entries with only the metrics</returns>
-        /// <remarks>This is just a rough implementation for testing the database.
-        /// I'm likely going to create a new Model specifically for the metrics. </remarks>
+        /// <remarks> This function can most likely be scrapped since all user metrics is handled with the metricsController
+        ///             This function may cause errors when used in frontend.
+        ///</remarks>
         [HttpGet("GetMetrics")]
         public List<Metrics> GetMetrics(string userID)
         {
@@ -75,7 +76,8 @@ namespace _2122_Senior_Project_06.Controllers
         /// User can update Email, Username or Password
         /// </summary>
         /// <param name="UserAccount">UserAccount is obtained dependent on what the user would like to update</param>
-        /// <returns>IActionResult, Ok() if successful, Forbid() if invalid/user DNE</returns>
+        /// <returns>IActionResult, Ok() if successful, Forbid() if SQLinjection/user DNE. 
+        ///     If successful but user inputted invalid information then error is displayed to user</returns>
         [HttpPut("UpdateUser")]
         public IActionResult UpdateUser([FromBody]AccountModel potentialUpdate) //might need to send UID seperate
         {
@@ -84,8 +86,9 @@ namespace _2122_Senior_Project_06.Controllers
                 /*
                     Bool Key:
                     [0]: password
-                    [1]: email
-                    [2]: username
+                    [1]: confirmPassword
+                    [2]: email
+                    [3]: username
                 */
                 potentialUpdate.VerificationErrors = new string[3];
                 potentialUpdate.VerificationResults = new bool[3];
@@ -96,15 +99,33 @@ namespace _2122_Senior_Project_06.Controllers
                     {
                         try
                         {
-                            potentialUpdate.VerificationResults[0] = Sys_Security.VerifyNewPass(potentialUpdate.new_Password);
+                            if(potentialUpdate.new_Password == potentialUpdate.confirmedPassword)
+                            {
+                                try
+                                {
+                                    potentialUpdate.VerificationResults[0] = Sys_Security.VerifyNewPass(potentialUpdate.new_Password);
+                                    potentialUpdate.VerificationResults[1] = true;
+                                }
+                                catch(IssueWithCredentialException e)
+                                {
+                                    potentialUpdate.VerificationResults[0] = false;
+                                    potentialUpdate.VerificationErrors[0] = e.Message;
+                                }
+                            }
+                            else throw new IssueWithCredentialException("Passowrds do not match.");
                         }
                         catch(IssueWithCredentialException e)
                         {
-                            potentialUpdate.VerificationResults[0] = false;
-                            potentialUpdate.VerificationErrors[0] = e.Message;
+                            potentialUpdate.VerificationResults[1] = false;
+                            potentialUpdate.VerificationErrors[1] = e.Message;
                         }
+                        
                     }
-                    else potentialUpdate.VerificationResults[0] = true;
+                    else 
+                    {
+                        potentialUpdate.VerificationResults[0] = true;
+                        potentialUpdate.VerificationResults[1] = true;
+                    }
 
                     if(potentialUpdate.new_Email != null)
                     {
@@ -113,7 +134,7 @@ namespace _2122_Senior_Project_06.Controllers
                             if(Sys_Security.VerifyEmail(potentialUpdate.new_Email))//if email is an email and if email is not already in use
                             {
                                 if(!UserAccountsDataTable.EmailInUse(potentialUpdate.new_Email))
-                                    potentialUpdate.VerificationResults[1] = true;
+                                    potentialUpdate.VerificationResults[2] = true;
 
                                 else throw new IssueWithCredentialException("Email already in use.");
                             }
@@ -121,22 +142,22 @@ namespace _2122_Senior_Project_06.Controllers
                         }
                         catch(IssueWithCredentialException e)
                         {
-                            potentialUpdate.VerificationResults[1] = false;
-                            potentialUpdate.VerificationErrors[1] = e.Message;
+                            potentialUpdate.VerificationResults[2] = false;
+                            potentialUpdate.VerificationErrors[2] = e.Message;
                         }
                     }
-                    else potentialUpdate.VerificationResults[1] = true;
+                    else potentialUpdate.VerificationResults[2] = true;
 
                     if(potentialUpdate.new_Username != null)
                     {
-                        potentialUpdate.VerificationResults[2] = true;
+                        potentialUpdate.VerificationResults[3] = true;
                     }
-                    else potentialUpdate.VerificationResults[2] = true;
+                    else potentialUpdate.VerificationResults[3] = true;
 
                     if(!potentialUpdate.VerificationResults.Contains(false))
                     {
                         UserAccount updatedUser = new UserAccount(potentialUpdate.new_Username, potentialUpdate.new_Email,
-                                                        Sys_Security.SHA256_Hash(potentialUpdate.new_Password), false, BackgroundItems.Beach);
+                                                        Sys_Security.SHA256_Hash(potentialUpdate.new_Password), potentialUpdate.DarkMode, potentialUpdate.Background);
                         currInfo.UpdateInfo(updatedUser);
                         UserAccountsDataTable.UpdateUserAccount(currInfo);
                     } 

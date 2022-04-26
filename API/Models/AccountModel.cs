@@ -12,6 +12,9 @@ namespace  _2122_Senior_Project_06.Models
         public string new_Password { get; set; }
         public string new_Email { get; set; }
         public string confirmedPassword { get; set; }
+        public bool IsSetting {get; set;}
+        public bool DarkMode {get; set;}
+        public string Background {get; set;}
 
         /// <summary>
         /// Gets and sets the results of the verification.

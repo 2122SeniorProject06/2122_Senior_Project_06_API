@@ -120,7 +120,7 @@ namespace _2122_Senior_Project_06.Controllers
             if(!potentialAccount.VerificationResults.Contains(false)) //If everything is ok then we create account
             {
                 UserAccount newAccount = new UserAccount(potentialAccount.Username, potentialAccount.Email,
-                                                        Sys_Security.SHA256_Hash(potentialAccount.Password), false, BackgroundItems.Beach);
+                                                        Sys_Security.SHA256_Hash(potentialAccount.Password));
                 UserAccountsDataTable.AddNewAccount(newAccount);
             }
 

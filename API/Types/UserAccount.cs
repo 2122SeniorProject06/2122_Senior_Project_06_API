@@ -30,14 +30,14 @@ namespace  _2122_Senior_Project_06.Types
         /// <param name="username">The chosen username.</param>
         /// <param name="email">The chosen email.</param>
         /// <param name="password">The chosen password. Hash before sending.</param>
-        public UserAccount(string username, string email, string password, bool darkMode, string background)
+        public UserAccount(string username, string email, string password, bool darkMode = false, string background = null)
         {
             Username = username;
             Password = password;
             Email = email;
             UserID = Sys_Security.GenID(UserID,true);
             DarkMode = darkMode;
-            Background = background;
+            Background = background ?? BackgroundItems.Mountain;
         }
 
         public UserAccount(AccountModel account)
