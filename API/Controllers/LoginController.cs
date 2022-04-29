@@ -38,6 +38,7 @@ namespace _2122_Senior_Project_06.Controllers
             string userID = null;
             UserAccount curr_User = null;
             loginModel.UserPrefrences = new List<string>();
+            try{
             if(Sys_Security.VerifyPass(loginModel.Password, loginModel.Email))
             {
                 userID = UserAccountsDataTable.GetUIDFromEmail(loginModel.Email);
@@ -48,6 +49,9 @@ namespace _2122_Senior_Project_06.Controllers
                     curr_User.Email = null;
                     curr_User.Username = null;
                 }
+            }}
+            catch(Exception e){
+                curr_User.UserID = e.Message;
             }
             return curr_User;
         }

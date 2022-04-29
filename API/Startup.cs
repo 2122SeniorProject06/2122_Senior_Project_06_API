@@ -58,7 +58,7 @@ namespace _2122_Senior_Project_06
                 
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseCors();
