@@ -26,7 +26,7 @@ jobs:
         run: dotnet build .\API\2122_Senior_Project_06.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish .\API\2122_Senior_Project_06.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
