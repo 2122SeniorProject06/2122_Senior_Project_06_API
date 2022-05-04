@@ -13,14 +13,15 @@ namespace _2122_Senior_Project_06
     /// <summary>
     /// Class in charge of system and cyber security.
     /// </summary>
-    /// <remarks> Created by Andrew Bevilacqua. </remarks>
+    /// <remarks> Created by Andrew and Hugo. </remarks>
     internal class Sys_Security
     {
         /// <summary>
         /// Verify input is not a SQL injection attack.
         /// </summary>
         /// <param name="args">The value to check.</param>
-        /// <returns>If the value is a SQL injection or not.</returns>
+        /// <returns>This solely used to check a string for certain words or series of characters.
+        /// Name was never changed, SQL inejection mitigated by URLencoding</returns>
         private static bool SQLCheck(string args) 
         {
             

@@ -35,7 +35,7 @@ namespace  _2122_Senior_Project_06.Models
         /// <para>It is a 4 element array of whether the user input is valid.</para>
         /// <para>0: Email is valid.</para>
         /// <para>1: Password inputs match.</para>
-        /// <para>2: Username is walid.</para>
+        /// <para>2: Username is valid.</para>
         /// <para>3: Password is valid.</para>
         /// </remarks>
         public bool[] VerificationResults {get; set;}

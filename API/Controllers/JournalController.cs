@@ -85,6 +85,8 @@ namespace _2122_Senior_Project_06.Controllers
                 return null;
                 /*
                 SQL injection, return some form of error
+                Isn't UserID, return some form of error
+                Send to error page?
                 */
             }
         }

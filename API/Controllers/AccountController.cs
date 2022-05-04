@@ -21,10 +21,9 @@ namespace _2122_Senior_Project_06.Controllers
      */
 
     /// <summary>
-    /// The API's login controller.
+    /// The API's Account controller.
     /// </summary>
-    ///  <remarks> Ok so i have very little idea how this is going to work, needs to be discussed with hugo and sarah.
-    ///            Most likely we will need to make a new model as well + new SQL functions  </remarks>
+    ///  <remarks>  Paired programmed by Andrew, Hugo, and Sarah. </remarks>
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("[controller]")]
@@ -198,7 +197,8 @@ namespace _2122_Senior_Project_06.Controllers
         {
             /*
                 change username in database
-
+                Username is used for display
+                    No extra 
             */
             return Ok();
         }

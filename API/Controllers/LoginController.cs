@@ -16,7 +16,6 @@ namespace _2122_Senior_Project_06.Controllers
      /*
      * The following controller processes a user logging in
      *  @ AuthenticateUser
-     *  @ RetrieveID(maybe on database end?)
      */
 
     /// <summary>
