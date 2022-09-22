@@ -9,7 +9,7 @@ namespace _2122_Senior_Project_06
         [Fact]
         public void Test1() // Test Password Policy
         {
-            string testPassword = "GoodTestPassword01";
+            string testPassword = "Helloww";
             string testPassword2 = "badpass01";
             Sys_Security.VerifyNewPass(testPassword);
             Sys_Security.VerifyNewPass(testPassword2);
